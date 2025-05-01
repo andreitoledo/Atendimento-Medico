@@ -49,6 +49,10 @@ builder.Services.AddSwaggerGen();
 
 // Repositórios
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<IPacienteRepository, PacienteRepository>();
+builder.Services.AddScoped<IMedicoRepository, MedicoRepository>();
+
+
 
 // Banco de dados
 builder.Services.AddDbContext<ClinicaContext>(options =>

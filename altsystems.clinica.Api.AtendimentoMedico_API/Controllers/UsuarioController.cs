@@ -1,11 +1,13 @@
 using altsystems.clinica.Api.AtendimentoMedico_API.DTOs;
 using altsystems.clinica.Api.AtendimentoMedico_API.Models;
 using altsystems.clinica.Api.AtendimentoMedico_API.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static BCrypt.Net.BCrypt;
 
 namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
 {
+   // [Authorize(Roles = "admin,medico")]
     [ApiController]
     [Route("api/[controller]")]
     public class UsuarioController : ControllerBase
