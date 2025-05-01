@@ -1,0 +1,6 @@
+@altsystems.clinica.Api.AtendimentoMedico_API_HostAddress = http://localhost:5023
+
+GET {{altsystems.clinica.Api.AtendimentoMedico_API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
