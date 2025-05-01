@@ -1,0 +1,1 @@
+# altsystems.clinica.Api.AtendimentoMedico_API
