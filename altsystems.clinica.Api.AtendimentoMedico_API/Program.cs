@@ -53,6 +53,7 @@ builder.Services.AddScoped<IPacienteRepository, PacienteRepository>();
 builder.Services.AddScoped<IMedicoRepository, MedicoRepository>();
 builder.Services.AddScoped<IAgendamentoRepository, AgendamentoRepository>();
 builder.Services.AddScoped<IProntuarioClinicoRepository, ProntuarioClinicoRepository>();
+builder.Services.AddScoped<IProntuarioPsiquiatraRepository, ProntuarioPsiquiatraRepository>();
 
 
 

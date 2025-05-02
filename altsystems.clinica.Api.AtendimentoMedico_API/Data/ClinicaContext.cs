@@ -16,6 +16,8 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Data
         public DbSet<CAT> CATs { get; set; }
         public DbSet<Receita> Receitas { get; set; }
         public DbSet<LogUsuario> LogsUsuarios { get; set; }
+        public DbSet<ProntuarioPsiquiatra> ProntuariosPsiquiatra { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,6 +30,7 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Data
             modelBuilder.Entity<CAT>().ToTable("CATs");
             modelBuilder.Entity<Receita>().ToTable("Receitas");
             modelBuilder.Entity<LogUsuario>().ToTable("LogsUsuarios");
+            modelBuilder.Entity<ProntuarioPsiquiatra>().ToTable("ProntuariosPsiquiatra");
         }
     }
 }
