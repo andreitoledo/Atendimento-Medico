@@ -19,11 +19,13 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Data
         public DbSet<ProntuarioPsiquiatra> ProntuariosPsiquiatra { get; set; }
         public DbSet<ProntuarioPsicologo> ProntuariosPsicologo { get; set; }
         public DbSet<Especialidade> Especialidades { get; set; }
-
-
+        public DbSet<MedicoEspecialidade> MedicoEspecialidades { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            // Mapear entidades para tabelas
             modelBuilder.Entity<Usuario>().ToTable("Usuarios");
             modelBuilder.Entity<Medico>().ToTable("Medicos");
             modelBuilder.Entity<Paciente>().ToTable("Pacientes");
@@ -36,6 +38,21 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Data
             modelBuilder.Entity<ProntuarioPsiquiatra>().ToTable("ProntuariosPsiquiatra");
             modelBuilder.Entity<ProntuarioPsicologo>().ToTable("ProntuariosPsicologo");
             modelBuilder.Entity<Especialidade>().ToTable("Especialidades");
+            modelBuilder.Entity<MedicoEspecialidade>().ToTable("MedicoEspecialidades");
+
+            // Chave composta para tabela intermediária
+            modelBuilder.Entity<MedicoEspecialidade>()
+                .HasKey(me => new { me.MedicoId, me.EspecialidadeId });
+
+            modelBuilder.Entity<MedicoEspecialidade>()
+                .HasOne(me => me.Medico)
+                .WithMany(m => m.MedicoEspecialidades)
+                .HasForeignKey(me => me.MedicoId);
+
+            modelBuilder.Entity<MedicoEspecialidade>()
+                .HasOne(me => me.Especialidade)
+                .WithMany()
+                .HasForeignKey(me => me.EspecialidadeId);
         }
     }
 }
