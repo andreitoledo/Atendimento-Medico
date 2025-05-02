@@ -36,8 +36,7 @@ Sistema completo para clínicas com agendamento online, prontuários eletrônico
 - 🧠 Arquitetura do sistema 
 ![arquitetura atendimento medico](https://github.com/user-attachments/assets/1b27b214-03b4-4f80-9cdc-a042489ee683)
 
-- 📘 Diagrama de classes UML
-- 
+- 📘 Diagrama de classes UML 
 ![diagrama de classe - atendimento medico](https://github.com/user-attachments/assets/cf5825a2-7a42-42da-9ec1-4256ce00a3c8)
 
 ---
