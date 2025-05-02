@@ -1,12 +1,13 @@
 using System;
 
-namespace altsystems.clinica.Api.AtendimentoMedico_API.Models
+namespace altsystems.clinica.Api.AtendimentoMedico_API.DTOs
 {
-    public class ProntuarioClinico
+    public class ProntuarioClinicoDTO
     {
         public int Id { get; set; }
         public int AgendamentoId { get; set; }
-        public Agendamento Agendamento { get; set; }
+        public string NomePaciente { get; set; }
+        public string NomeMedico { get; set; }
 
         public string QueixaPrincipal { get; set; }
         public string HistoriaDoencaAtual { get; set; }
