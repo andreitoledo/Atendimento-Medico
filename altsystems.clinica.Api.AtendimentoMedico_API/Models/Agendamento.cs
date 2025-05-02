@@ -12,4 +12,7 @@ public class Agendamento
 
     public Medico Medico { get; set; }
     public Paciente Paciente { get; set; }
+
+    public bool CheckIn { get; set; } = false;
+
 }

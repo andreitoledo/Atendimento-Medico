@@ -59,6 +59,8 @@ builder.Services.AddScoped<IEspecialidadeRepository, EspecialidadeRepository>();
 builder.Services.AddScoped<IMedicoEspecialidadeRepository, MedicoEspecialidadeRepository>();
 builder.Services.AddScoped<IFaturamentoRepository, FaturamentoRepository>();
 builder.Services.AddScoped<ITriagemRepository, TriagemRepository>();
+builder.Services.AddScoped<IRecepcaoRepository, RecepcaoRepository>();
+
 
 
 
