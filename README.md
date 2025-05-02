@@ -24,7 +24,7 @@ Sistema completo para clínicas com agendamento online, prontuários eletrônico
 - Controle de permissões por perfil
 - Dashboard com indicadores de saúde
 
-> Veja o roadmap completo [aqui](./Roadmap_ClinicaOnline_Completo.docx)
+> Veja o roadmap completo [aqui](https://github.com/andreitoledo/Atendimento-Medico/blob/master/altsystems.clinica.Api.AtendimentoMedico_API/Roadmap_ClinicaOnline_Completo.docx)
 
 ---
 
