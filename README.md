@@ -68,6 +68,6 @@ https://localhost:44327/swagger
 
 ## 🤝 Contato
 Desenvolvido por Andrei Toledo
-📧 andreitoledo_dev@hotmail.com | 💼 [LinkedIn/Portfolio](https://www.linkedin.com/in/andreilucianotoledo/)
+📧 andreitoledo_dev@hotmail.com | 💼 [LinkedIn](https://www.linkedin.com/in/andreilucianotoledo/)
 
 ### Este sistema está em constante evolução e preparado para ser personalizado conforme a realidade da sua clínica.
