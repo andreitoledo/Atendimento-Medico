@@ -57,6 +57,7 @@ builder.Services.AddScoped<IProntuarioPsiquiatraRepository, ProntuarioPsiquiatra
 builder.Services.AddScoped<IProntuarioPsicologoRepository, ProntuarioPsicologoRepository>();
 builder.Services.AddScoped<IEspecialidadeRepository, EspecialidadeRepository>();
 builder.Services.AddScoped<IMedicoEspecialidadeRepository, MedicoEspecialidadeRepository>();
+builder.Services.AddScoped<IFaturamentoRepository, FaturamentoRepository>();
 
 
 
