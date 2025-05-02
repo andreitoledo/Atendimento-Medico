@@ -15,7 +15,27 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
 
         public async Task<IEnumerable<Faturamento>> ObterTodos()
         {
-            return await _context.Faturamentos.ToListAsync();
+            return await _context.Faturamentos
+                .Include(f => f.Agendamento)
+                    .ThenInclude(a => a.Paciente)
+                        .ThenInclude(p => p.Usuario)
+                .Include(f => f.Agendamento)
+                    .ThenInclude(a => a.Medico)
+                        .ThenInclude(m => m.Usuario)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Faturamento>> ObterPorPeriodo(DateTime dataInicio, DateTime dataFim)
+        {
+            return await _context.Faturamentos
+                .Include(f => f.Agendamento)
+                    .ThenInclude(a => a.Paciente)
+                        .ThenInclude(p => p.Usuario)
+                .Include(f => f.Agendamento)
+                    .ThenInclude(a => a.Medico)
+                        .ThenInclude(m => m.Usuario)
+                .Where(f => f.Data >= dataInicio && f.Data <= dataFim)
+                .ToListAsync();
         }
 
         public async Task<Faturamento> ObterPorId(int id)

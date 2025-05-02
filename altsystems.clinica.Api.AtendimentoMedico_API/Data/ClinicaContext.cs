@@ -63,6 +63,19 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Data
                 .HasOne(me => me.Especialidade)
                 .WithMany()
                 .HasForeignKey(me => me.EspecialidadeId);
+
+            modelBuilder.Entity<Faturamento>()
+                .HasOne(f => f.Agendamento)
+                .WithMany()
+                .HasForeignKey(f => f.AgendamentoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Faturamento>()
+                .HasOne(f => f.Paciente)
+                .WithMany()
+                .HasForeignKey(f => f.PacienteId)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }

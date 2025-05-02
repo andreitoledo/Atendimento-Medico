@@ -28,7 +28,27 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
                 Data = f.Data,
                 Valor = f.Valor,
                 FormaPagamento = f.FormaPagamento,
-                Descricao = f.Descricao
+                Descricao = f.Descricao,
+                PacienteNome = f.Agendamento?.Paciente?.Usuario?.Nome,
+                MedicoNome = f.Agendamento?.Medico?.Usuario?.Nome
+            }));
+        }
+
+        [HttpGet("periodo")]
+        public async Task<ActionResult<IEnumerable<FaturamentoDTO>>> GetPorPeriodo([FromQuery] DateTime dataInicio, [FromQuery] DateTime dataFim)
+        {
+            var lista = await _repository.ObterPorPeriodo(dataInicio, dataFim);
+            return Ok(lista.Select(f => new FaturamentoDTO
+            {
+                Id = f.Id,
+                AgendamentoId = f.AgendamentoId,
+                PacienteId = f.PacienteId,
+                Data = f.Data,
+                Valor = f.Valor,
+                FormaPagamento = f.FormaPagamento,
+                Descricao = f.Descricao,
+                PacienteNome = f.Agendamento?.Paciente?.Usuario?.Nome,
+                MedicoNome = f.Agendamento?.Medico?.Usuario?.Nome
             }));
         }
 

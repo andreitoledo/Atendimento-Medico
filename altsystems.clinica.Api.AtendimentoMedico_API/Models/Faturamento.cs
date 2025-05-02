@@ -11,5 +11,9 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Models
         public decimal Valor { get; set; }
         public string FormaPagamento { get; set; }
         public string? Descricao { get; set; }
+
+        // Navegações
+        public Agendamento Agendamento { get; set; }
+        public Paciente Paciente { get; set; }
     }
 }

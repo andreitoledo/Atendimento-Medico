@@ -11,5 +11,7 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.DTOs
         public decimal Valor { get; set; }
         public string FormaPagamento { get; set; }
         public string? Descricao { get; set; }
+        public string? PacienteNome { get; set; }
+        public string? MedicoNome { get; set; }
     }
 }
