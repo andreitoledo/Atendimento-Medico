@@ -21,6 +21,7 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Data
         public DbSet<Especialidade> Especialidades { get; set; }
         public DbSet<MedicoEspecialidade> MedicoEspecialidades { get; set; }
         public DbSet<Faturamento> Faturamentos { get; set; }
+        public DbSet<Triagem> Triagens { get; set; }
 
 
 
@@ -43,6 +44,8 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Data
             modelBuilder.Entity<Especialidade>().ToTable("Especialidades");
             modelBuilder.Entity<MedicoEspecialidade>().ToTable("MedicoEspecialidades");
             modelBuilder.Entity<Faturamento>().ToTable("Faturamentos");
+            modelBuilder.Entity<Triagem>().ToTable("Triagens");
+
 
 
 
