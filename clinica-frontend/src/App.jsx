@@ -1,0 +1,28 @@
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import LoginPage from './pages/LoginPage';
+import HomePage from './pages/HomePage';
+import RecepcaoPage from './pages/RecepcaoPage';
+import TriagemPage from './pages/TriagemPage';
+
+function App() {
+  const token = localStorage.getItem('token');
+
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        {token && (
+          <>
+            <Route path="/home" element={<HomePage />} />
+            <Route path="/recepcao" element={<RecepcaoPage />} />
+            <Route path="/triagem" element={<TriagemPage />} />
+          </>
+        )}
+        <Route path="*" element={<Navigate to={token ? '/home' : '/'} />} />
+      </Routes>
+    </Router>
+  );
+}
+
+export default App;
