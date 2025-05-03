@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import RecepcaoPage from './pages/RecepcaoPage';
 import TriagemPage from './pages/TriagemPage';
 import EspecialidadesPage from './pages/EspecialidadesPage';
+import MedicosPage from './pages/MedicosPage';
 
 
 function App() {
@@ -20,7 +21,9 @@ function App() {
             <Route path="/recepcao" element={<RecepcaoPage />} />
             <Route path="/triagem" element={<TriagemPage />} />
             <Route path="/especialidades" element={<EspecialidadesPage />} />
-            
+            <Route path="/medicos" element={<MedicosPage />} />
+
+
           </>
         )}
         <Route path="*" element={<Navigate to={token ? '/home' : '/'} />} />
