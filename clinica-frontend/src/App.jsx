@@ -4,6 +4,8 @@ import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
 import RecepcaoPage from './pages/RecepcaoPage';
 import TriagemPage from './pages/TriagemPage';
+import EspecialidadesPage from './pages/EspecialidadesPage';
+
 
 function App() {
   const token = localStorage.getItem('token');
@@ -17,6 +19,8 @@ function App() {
             <Route path="/home" element={<HomePage />} />
             <Route path="/recepcao" element={<RecepcaoPage />} />
             <Route path="/triagem" element={<TriagemPage />} />
+            <Route path="/especialidades" element={<EspecialidadesPage />} />
+            
           </>
         )}
         <Route path="*" element={<Navigate to={token ? '/home' : '/'} />} />

@@ -18,8 +18,9 @@ const Layout = ({ children }) => {
     { label: 'Recepção', path: '/recepcao', roles: ['admin', 'medico'] },
     { label: 'Triagem', path: '/triagem', roles: ['admin', 'medico'] },
     { label: 'Faturamento', path: '/faturamento', roles: ['admin'] },
-    { label: 'Relatórios', path: '/relatorios', roles: ['admin'] },
-    { label: 'Pacientes', path: '/pacientes', roles: ['admin', 'medico'] },
+    { label: 'Relatórios', path: '/relatorios', roles: ['admin'] },  
+    { label: 'Especialidades', path: '/especialidades', roles: ['admin'] },
+
   ];
 
   const handleLogout = () => {
