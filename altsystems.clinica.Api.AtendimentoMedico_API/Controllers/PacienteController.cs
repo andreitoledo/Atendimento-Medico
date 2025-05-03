@@ -16,14 +16,56 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
             _repository = repository;
         }
 
+        // original
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<PacienteDTO>>> GetPacientes()
+        //{
+        //    var pacientes = await _repository.ObterTodos();
+        //    var result = pacientes.Select(p => new PacienteDTO
+        //    {
+        //        Id = p.Id,
+        //        Nome = p.Usuario?.Nome,
+        //        CPF = p.CPF,
+        //        Genero = p.Genero,
+        //        Telefone = p.Telefone,
+        //        Endereco = p.Endereco,
+        //        DataNascimento = p.DataNascimento
+        //    });
+
+        //    return Ok(result);
+        //}
+
+
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<PacienteDTO>> GetPaciente(int id)
+        //{
+        //    var p = await _repository.ObterPorId(id);
+        //    if (p == null) return NotFound();
+
+        //    return Ok(new PacienteDTO
+        //    {
+        //        Id = p.Id,
+        //        Nome = p.Usuario?.Nome,
+        //        CPF = p.CPF,
+        //        Genero = p.Genero,
+        //        Telefone = p.Telefone,
+        //        Endereco = p.Endereco,
+        //        DataNascimento = p.DataNascimento
+        //    });
+        //}
+
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PacienteDTO>>> GetPacientes()
+        public async Task<ActionResult<IEnumerable<PacienteDetalheDto>>> ObterTodos()
         {
             var pacientes = await _repository.ObterTodos();
-            var result = pacientes.Select(p => new PacienteDTO
+
+            var resultado = pacientes.Select(p => new PacienteDetalheDto
             {
                 Id = p.Id,
+                UsuarioId = p.UsuarioId,
                 Nome = p.Usuario?.Nome,
+                Email = p.Usuario?.Email,
                 CPF = p.CPF,
                 Genero = p.Genero,
                 Telefone = p.Telefone,
@@ -31,29 +73,36 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
                 DataNascimento = p.DataNascimento
             });
 
-            return Ok(result);
+            return Ok(resultado);
         }
+
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<PacienteDTO>> GetPaciente(int id)
+        public async Task<ActionResult<PacienteDetalheDto>> ObterPorId(int id)
         {
-            var p = await _repository.ObterPorId(id);
-            if (p == null) return NotFound();
+            var paciente = await _repository.ObterPorId(id);
+            if (paciente == null) return NotFound();
 
-            return Ok(new PacienteDTO
+            var dto = new PacienteDetalheDto
             {
-                Id = p.Id,
-                Nome = p.Usuario?.Nome,
-                CPF = p.CPF,
-                Genero = p.Genero,
-                Telefone = p.Telefone,
-                Endereco = p.Endereco,
-                DataNascimento = p.DataNascimento
-            });
+                Id = paciente.Id,
+                UsuarioId = paciente.UsuarioId,
+                Nome = paciente.Usuario?.Nome,
+                Email = paciente.Usuario?.Email,
+                CPF = paciente.CPF,
+                Genero = paciente.Genero,
+                Telefone = paciente.Telefone,
+                Endereco = paciente.Endereco,
+                DataNascimento = paciente.DataNascimento
+            };
+
+            return Ok(dto);
         }
 
+
+
         [HttpPost]
-        public async Task<ActionResult<PacienteDTO>> CreatePaciente(PacienteCreateDTO dto)
+        public async Task<ActionResult<PacienteDetalheDto>> CreatePaciente(PacienteCreateDTO dto)
         {
             var paciente = new Paciente
             {
@@ -67,17 +116,25 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
 
             var created = await _repository.Criar(paciente);
 
-            return CreatedAtAction(nameof(GetPaciente), new { id = created.Id }, new PacienteDTO
+            // Recarrega com include do usuário (ajuste no repositório se necessário)
+            var pacienteComUsuario = await _repository.ObterPorId(created.Id);
+
+            var result = new PacienteDetalheDto
             {
-                Id = created.Id,
-                Nome = created.Usuario?.Nome,
-                CPF = created.CPF,
-                Genero = created.Genero,
-                Telefone = created.Telefone,
-                Endereco = created.Endereco,
-                DataNascimento = created.DataNascimento
-            });
+                Id = pacienteComUsuario.Id,
+                UsuarioId = pacienteComUsuario.UsuarioId,
+                Nome = pacienteComUsuario.Usuario?.Nome,
+                Email = pacienteComUsuario.Usuario?.Email,
+                CPF = pacienteComUsuario.CPF,
+                Genero = pacienteComUsuario.Genero,
+                Telefone = pacienteComUsuario.Telefone,
+                Endereco = pacienteComUsuario.Endereco,
+                DataNascimento = pacienteComUsuario.DataNascimento
+            };
+
+            return CreatedAtAction(nameof(ObterPorId), new { id = result.Id }, result);
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePaciente(int id, PacienteCreateDTO dto)
