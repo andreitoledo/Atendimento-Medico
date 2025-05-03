@@ -7,6 +7,7 @@ import TriagemPage from './pages/TriagemPage';
 import EspecialidadesPage from './pages/EspecialidadesPage';
 import MedicosPage from './pages/MedicosPage';
 import PacientesPage from './pages/PacientesPage';
+import UsuariosPage from './pages/UsuariosPage';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
             <Route path="/especialidades" element={<EspecialidadesPage />} />
             <Route path="/medicos" element={<MedicosPage />} />
             <Route path="/pacientes" element={<PacientesPage />} />
+            <Route path="/usuarios" element={<UsuariosPage />} />
 
 
           </>
