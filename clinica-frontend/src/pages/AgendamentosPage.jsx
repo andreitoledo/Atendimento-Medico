@@ -1,0 +1,198 @@
+import React, { useEffect, useState } from "react";
+import Layout from "../components/Layout";
+import {
+  Box, Typography, Paper, TextField, Button, Table, TableHead,
+  TableRow, TableCell, TableBody, IconButton, MenuItem, Select
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+
+const AgendamentosPage = () => {
+  const [agendamentos, setAgendamentos] = useState([]);
+  const [medicos, setMedicos] = useState([]);
+  const [pacientes, setPacientes] = useState([]);
+  const [medicoId, setMedicoId] = useState("");
+  const [pacienteId, setPacienteId] = useState("");
+  const [dataConsulta, setDataConsulta] = useState("");
+  const [plataforma, setPlataforma] = useState("");
+  const [linkVideo, setLinkVideo] = useState("");
+  const [editingId, setEditingId] = useState(null);
+  const token = localStorage.getItem("token");
+
+  const fetchAgendamentos = async () => {
+    const res = await fetch("https://localhost:44327/api/Agendamento", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const data = await res.json();
+    setAgendamentos(data);
+  };
+
+  const fetchMedicos = async () => {
+    const res = await fetch("https://localhost:44327/api/Medico", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const data = await res.json();
+    setMedicos(data);
+  };
+
+  const fetchPacientes = async () => {
+    const res = await fetch("https://localhost:44327/api/Paciente", {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const data = await res.json();
+    setPacientes(data);
+  };
+
+  useEffect(() => {
+    fetchAgendamentos();
+    fetchMedicos();
+    fetchPacientes();
+  }, []);
+
+  const handleSubmit = async () => {
+    if (!medicoId || !pacienteId || !dataConsulta || !plataforma) return;
+
+    const agendamento = {
+      medicoId,
+      pacienteId,
+      dataConsulta,
+      plataforma,
+      linkVideo
+    };
+
+    const url = editingId
+      ? `https://localhost:44327/api/Agendamento/${editingId}`
+      : "https://localhost:44327/api/Agendamento";
+
+    const method = editingId ? "PUT" : "POST";
+
+    const res = await fetch(url, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(agendamento)
+    });
+
+    if (res.ok) {
+      resetForm();
+      fetchAgendamentos();
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const res = await fetch(`https://localhost:44327/api/Agendamento/${id}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (res.ok) fetchAgendamentos();
+  };
+
+  const handleEdit = (a) => {
+    setMedicoId(a.medicoId);
+    setPacienteId(a.pacienteId);
+    setDataConsulta(a.dataConsulta.substring(0, 16)); // para input type="datetime-local"
+    setPlataforma(a.plataforma);
+    setLinkVideo(a.linkVideo);
+    setEditingId(a.id);
+  };
+
+  const resetForm = () => {
+    setMedicoId("");
+    setPacienteId("");
+    setDataConsulta("");
+    setPlataforma("");
+    setLinkVideo("");
+    setEditingId(null);
+  };
+
+  return (
+    <Layout>
+      <Box>
+        <Typography variant="h5" gutterBottom>Agendamentos</Typography>
+
+        <Paper sx={{ p: 2, mb: 3 }}>
+          <Select value={medicoId} onChange={e => setMedicoId(e.target.value)} displayEmpty fullWidth sx={{ mb: 2 }}>
+            <MenuItem value="" disabled>Selecione o médico</MenuItem>
+            {medicos.map(m => (
+              <MenuItem key={m.id} value={m.id}>{m.nome}</MenuItem>
+            ))}
+          </Select>
+
+          <Select value={pacienteId} onChange={e => setPacienteId(e.target.value)} displayEmpty fullWidth sx={{ mb: 2 }}>
+            <MenuItem value="" disabled>Selecione o paciente</MenuItem>
+            {pacientes.map(p => (
+              <MenuItem key={p.id} value={p.id}>{p.nome}</MenuItem>
+            ))}
+          </Select>
+
+          <TextField
+            label="Data da Consulta"
+            type="datetime-local"
+            value={dataConsulta}
+            onChange={e => setDataConsulta(e.target.value)}
+            fullWidth sx={{ mb: 2 }}
+            InputLabelProps={{ shrink: true }}
+          />
+
+          <Select value={plataforma} onChange={e => setPlataforma(e.target.value)} displayEmpty fullWidth sx={{ mb: 2 }}>
+            <MenuItem value="" disabled>Selecione a plataforma</MenuItem>
+            <MenuItem value="WhatsApp">WhatsApp</MenuItem>
+            <MenuItem value="Google Meet">Google Meet</MenuItem>
+            <MenuItem value="Zoom">Zoom</MenuItem>
+          </Select>
+
+          <TextField
+            label="Link da Vídeo"
+            value={linkVideo}
+            onChange={e => setLinkVideo(e.target.value)}
+            fullWidth sx={{ mb: 2 }}
+          />
+
+          <Button variant="contained" onClick={handleSubmit}>
+            {editingId ? "Atualizar" : "Agendar"}
+          </Button>
+        </Paper>
+
+        <Paper>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>Médico</TableCell>
+                <TableCell>Paciente</TableCell>
+                <TableCell>Data</TableCell>
+                <TableCell>Plataforma</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Ações</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {agendamentos.map((a) => (
+                <TableRow key={a.id}>
+                  <TableCell>{a.id}</TableCell>
+                  <TableCell>{a.nomeMedico}</TableCell>
+                  <TableCell>{a.nomePaciente}</TableCell>
+                  <TableCell>{new Date(a.dataConsulta).toLocaleString("pt-BR")}</TableCell>
+                  <TableCell>{a.plataforma}</TableCell>
+                  <TableCell>{a.status}</TableCell>
+                  <TableCell style={{ display: "flex", gap: 8 }}>
+                    <IconButton onClick={() => handleEdit(a)}>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton onClick={() => handleDelete(a.id)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+      </Box>
+    </Layout>
+  );
+};
+
+export default AgendamentosPage;
