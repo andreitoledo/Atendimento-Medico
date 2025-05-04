@@ -10,6 +10,7 @@ import PacientesPage from './pages/PacientesPage';
 import UsuariosPage from './pages/UsuariosPage';
 import AgendamentosPage from './pages/AgendamentosPage';
 import ConsultasPage from './pages/ConsultasPage';
+import FaturamentosPage from './pages/FaturamentosPage';
 
 
 
@@ -31,6 +32,7 @@ function App() {
             <Route path="/usuarios" element={<UsuariosPage />} />
             <Route path="/agendamentos" element={<AgendamentosPage />} />
             <Route path="/consultas" element={<ConsultasPage />} />
+            <Route path="/faturamentos" element={<FaturamentosPage />} />
 
 
           </>

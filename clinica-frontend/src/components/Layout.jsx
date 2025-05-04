@@ -17,7 +17,7 @@ const Layout = ({ children }) => {
   const menu = [
     { label: 'Recepção', path: '/recepcao', roles: ['admin', 'medico'] },
     { label: 'Triagem', path: '/triagem', roles: ['admin', 'medico'] },
-    { label: 'Faturamento', path: '/faturamento', roles: ['admin'] },
+    { label: 'Faturamentos', path: '/faturamentos', roles: ['admin'] },
     { label: 'Relatórios', path: '/relatorios', roles: ['admin'] },  
     { label: 'Especialidades', path: '/especialidades', roles: ['admin'] },
     { label: 'Medicos', path: '/medicos', roles: ['admin'] },
