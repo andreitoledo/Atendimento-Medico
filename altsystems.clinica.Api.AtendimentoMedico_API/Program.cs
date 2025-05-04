@@ -61,6 +61,8 @@ builder.Services.AddScoped<IFaturamentoRepository, FaturamentoRepository>();
 builder.Services.AddScoped<ITriagemRepository, TriagemRepository>();
 builder.Services.AddScoped<IRecepcaoRepository, RecepcaoRepository>();
 
+builder.Services.AddScoped<IConsultaRepository, ConsultaRepository>();
+
 
 
 
