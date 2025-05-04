@@ -24,6 +24,7 @@ const Layout = ({ children }) => {
     { label: 'Pacientes', path: '/pacientes', roles: ['admin'] },
     { label: 'Usuarios', path: '/usuarios', roles: ['admin'] },
     { label: 'agendamentos', path: '/agendamentos', roles: ['admin'] },
+    { label: 'consultas', path: '/consultas', roles: ['admin'] },
 
 
   ];
