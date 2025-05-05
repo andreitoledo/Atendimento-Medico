@@ -18,14 +18,15 @@ const Layout = ({ children }) => {
     { label: 'Recepção', path: '/recepcao', roles: ['admin', 'medico'] },
     { label: 'Triagem', path: '/triagem', roles: ['admin', 'medico'] },
     { label: 'Faturamentos', path: '/faturamentos', roles: ['admin'] },
-    { label: 'Relatórios', path: '/relatorios', roles: ['admin'] },  
+    // { label: 'Relatórios', path: '/relatorios', roles: ['admin'] },  
     { label: 'Especialidades', path: '/especialidades', roles: ['admin'] },
     { label: 'Medicos', path: '/medicos', roles: ['admin'] },
     { label: 'Pacientes', path: '/pacientes', roles: ['admin'] },
     { label: 'Usuarios', path: '/usuarios', roles: ['admin'] },
-    { label: 'agendamentos', path: '/agendamentos', roles: ['admin'] },
-    { label: 'consultas', path: '/consultas', roles: ['admin'] },
-    { label: 'relatoriosFaturamentos', path: '/relatoriosFaturamentos', roles: ['admin'] },
+    { label: 'Agendamentos', path: '/agendamentos', roles: ['admin'] },
+    { label: 'Consultas Médicas', path: '/consultas', roles: ['admin'] },
+    { label: 'Relatorios Faturamentos', path: '/relatoriosFaturamentos', roles: ['admin'] },
+    { label: 'Dashboard Financeiros', path: '/dashboardFinanceiro', roles: ['admin'] },
 
 
   ];
