@@ -4,7 +4,7 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
 {
     public interface IAgendamentoRepository
     {
-        Task<IEnumerable<Agendamento>> ObterTodos();
+        Task<IEnumerable<Agendamento>> ObterTodos(string status);
         Task<Agendamento> ObterPorId(int id);
         Task<Agendamento> Criar(Agendamento agendamento);
         Task<Agendamento> Atualizar(Agendamento agendamento);

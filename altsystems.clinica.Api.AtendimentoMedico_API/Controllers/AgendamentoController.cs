@@ -18,9 +18,9 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AgendamentoDTO>>> GetAgendamentos()
+        public async Task<ActionResult<IEnumerable<AgendamentoDTO>>> GetAgendamentos([FromQuery] string? status)
         {
-            var agendamentos = await _repository.ObterTodos();
+            var agendamentos = await _repository.ObterTodos(status);
             var result = agendamentos.Select(a => new AgendamentoDTO
             {
                 Id = a.Id,
@@ -97,6 +97,7 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
             agendamento.DataConsulta = dto.DataConsulta;
             agendamento.Plataforma = dto.Plataforma;
             agendamento.LinkVideo = dto.LinkVideo;
+            agendamento.Status = dto.Status;
 
             await _repository.Atualizar(agendamento);
             return NoContent();

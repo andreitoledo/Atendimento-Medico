@@ -1,6 +1,7 @@
 using altsystems.clinica.Api.AtendimentoMedico_API.Data;
 using altsystems.clinica.Api.AtendimentoMedico_API.Models;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
 {
@@ -12,12 +13,19 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Agendamento>> ObterTodos()
+        public async Task<IEnumerable<Agendamento>> ObterTodos(string? status = null)
         {
-            return await _context.Agendamentos               
+            var query = _context.Agendamentos               
                 .Include(a => a.Medico).ThenInclude(m => m.Usuario)
                 .Include(a => a.Paciente).ThenInclude(p => p.Usuario)
-                .ToListAsync();
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(status))
+            {
+                query = query.Where(a => a.Status == status);
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<Agendamento> ObterPorId(int id)
