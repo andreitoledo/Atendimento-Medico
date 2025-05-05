@@ -38,9 +38,13 @@ const FaturamentosPage = () => {
     });
     const data = await res.json();
 
-    const faturadosIds = faturamentos.map(f => f.agendamentoId);
-    const filtrados = data.filter(a => a.checkIn && !faturadosIds.includes(a.id));
-    setAgendamentos(filtrados);
+    // Aplicar filtro: apenas agendamentos com checkIn = true
+    const agendamentosComCheckin = data.filter((a) => a.checkIn === true);
+    setAgendamentos(agendamentosComCheckin);
+
+    // const faturadosIds = faturamentos.map(f => f.agendamentoId);
+    // const filtrados = data.filter(a => a.checkIn && !faturadosIds.includes(a.id));
+    // setAgendamentos(filtrados);
   };
 
   const resetForm = () => {
