@@ -45,7 +45,13 @@ const AgendamentosPage = () => {
       headers: { Authorization: `Bearer ${token}` }
     });
     const data = await res.json();
-    setPacientes(data);
+
+    // Agrupar pacientes únicos pelo ID
+  const pacientesUnicos = Array.from(
+    new Map(data.map(p => [p.id, p])).values()
+  );
+
+    setPacientes(pacientesUnicos);
   };
 
   useEffect(() => {
