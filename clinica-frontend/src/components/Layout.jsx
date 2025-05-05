@@ -27,6 +27,7 @@ const Layout = ({ children }) => {
     { label: 'Consultas Médicas', path: '/consultas', roles: ['admin'] },
     { label: 'Relatorios Faturamentos', path: '/relatoriosFaturamentos', roles: ['admin'] },
     { label: 'Dashboard Financeiros', path: '/dashboardFinanceiro', roles: ['admin'] },
+    { label: 'Relatório Médico', path: '/relatorioConsultaMedica', roles: ['admin'] },
 
 
   ];

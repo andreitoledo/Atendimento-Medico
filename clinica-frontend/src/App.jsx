@@ -13,6 +13,8 @@ import ConsultasPage from './pages/ConsultasPage';
 import FaturamentosPage from './pages/FaturamentosPage';
 import RelatorioFaturamentoPage from './pages/RelatorioFaturamentoPage';
 import DashboardFinanceiroPage from './pages/DashboardFinanceiroPage';
+import RelatorioConsultasMedicoPage from './pages/RelatorioConsultasMedicoPage';
+
 
 
 
@@ -37,6 +39,7 @@ function App() {
             <Route path="/faturamentos" element={<FaturamentosPage />} />
             <Route path="/relatoriosFaturamentos" element={<RelatorioFaturamentoPage />} />
             <Route path="/dashboardFinanceiro" element={<DashboardFinanceiroPage />} />
+            <Route path="/relatorioConsultaMedica" element={<RelatorioConsultasMedicoPage />} />
 
 
           </>
