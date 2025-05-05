@@ -18,6 +18,7 @@ const AgendamentosPage = () => {
   const [plataforma, setPlataforma] = useState("");
   const [linkVideo, setLinkVideo] = useState("");
   const [statusFiltro, setStatusFiltro] = useState("");
+  const [status, setStatus] = useState("agendado");
   const [editingId, setEditingId] = useState(null);
   const token = localStorage.getItem("token");
 
@@ -47,9 +48,9 @@ const AgendamentosPage = () => {
     const data = await res.json();
 
     // Agrupar pacientes únicos pelo ID
-  const pacientesUnicos = Array.from(
-    new Map(data.map(p => [p.id, p])).values()
-  );
+    const pacientesUnicos = Array.from(
+      new Map(data.map(p => [p.id, p])).values()
+    );
 
     setPacientes(pacientesUnicos);
   };
@@ -68,7 +69,8 @@ const AgendamentosPage = () => {
       pacienteId,
       dataConsulta,
       plataforma,
-      linkVideo
+      linkVideo,
+      status
     };
 
     const url = editingId
@@ -106,6 +108,7 @@ const AgendamentosPage = () => {
     setDataConsulta(a.dataConsulta.substring(0, 16)); // para input type="datetime-local"
     setPlataforma(a.plataforma);
     setLinkVideo(a.linkVideo);
+    setStatus(a.status);
     setEditingId(a.id);
   };
 
@@ -116,6 +119,7 @@ const AgendamentosPage = () => {
     setPlataforma("");
     setLinkVideo("");
     setEditingId(null);
+    setStatus("agendado");
   };
 
   // Função para realizar o check-in
@@ -136,7 +140,7 @@ const AgendamentosPage = () => {
         <Typography variant="h5" gutterBottom>Agendamentos</Typography>
 
         <Paper sx={{ p: 2, mb: 3 }}>
-        <Box display="flex" gap={2} alignItems="center" mb={2}>
+          <Box display="flex" gap={2} alignItems="center" mb={2}>
             <FormControl sx={{ minWidth: 200 }}>
               <InputLabel id="status-label">Status</InputLabel>
               <Select
@@ -183,6 +187,9 @@ const AgendamentosPage = () => {
             <MenuItem value="WhatsApp">WhatsApp</MenuItem>
             <MenuItem value="Google Meet">Google Meet</MenuItem>
             <MenuItem value="Zoom">Zoom</MenuItem>
+            <MenuItem value="Skype">Skype</MenuItem>
+            <MenuItem value="Teams">Teams</MenuItem>
+            <MenuItem value="Outros">Outros</MenuItem>
           </Select>
 
           <TextField
@@ -191,6 +198,15 @@ const AgendamentosPage = () => {
             onChange={e => setLinkVideo(e.target.value)}
             fullWidth sx={{ mb: 2 }}
           />
+
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <InputLabel>Status</InputLabel>
+            <Select value={status} onChange={(e) => setStatus(e.target.value)} fullWidth>
+              <MenuItem value="agendado">Agendado</MenuItem>
+              <MenuItem value="realizado">Realizado</MenuItem>
+              <MenuItem value="cancelado">Cancelado</MenuItem>
+            </Select>
+          </FormControl>
 
           <Button variant="contained" onClick={handleSubmit}>
             {editingId ? "Atualizar" : "Agendar"}
