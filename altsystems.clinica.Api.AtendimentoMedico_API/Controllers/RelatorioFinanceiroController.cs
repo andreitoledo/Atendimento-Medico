@@ -39,6 +39,8 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
         public async Task<IActionResult> GetPorPeriodo([FromQuery] DateTime inicio, [FromQuery] DateTime fim)
         {
             var faturamentos = await _context.Faturamentos
+                .Include(f => f.Paciente).ThenInclude(p => p.Usuario)
+                .Include(f => f.Agendamento).ThenInclude(a => a.Medico).ThenInclude(m => m.Usuario)
                 .Where(f => f.Data >= inicio && f.Data <= fim)
                 .OrderBy(f => f.Data)
                 .ToListAsync();
