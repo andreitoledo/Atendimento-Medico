@@ -19,6 +19,7 @@ import RelatorioAgendamentosPorPeriodoPage from './pages/RelatorioAgendamentosPo
 import RelatorioPacientesRecorrentesPage from './pages/RelatorioPacientesRecorrentesPage';
 import RelatorioProducaoMedicaPage from './pages/RelatorioProducaoMedicaPage';
 import RelatorioConsultasPorEspecialidadesPage from './pages/RelatorioConsultasPorEspecialidadesPage';
+import RelatorioConsultasPorDiaPage from './pages/RelatorioConsultasPorDiaPage';
 
 
 
@@ -49,6 +50,9 @@ function App() {
             <Route path="/relatorioPacientesRecorrentes" element={<RelatorioPacientesRecorrentesPage />} />
             <Route path="/relatorioProducaoMedica" element={<RelatorioProducaoMedicaPage />} />
             <Route path="/relatorioConsultasPorEspecialidades" element={<RelatorioConsultasPorEspecialidadesPage />} />
+            <Route path="/relatorioConsultasPorDia" element={<RelatorioConsultasPorDiaPage />} />
+            
+            
             
 
 

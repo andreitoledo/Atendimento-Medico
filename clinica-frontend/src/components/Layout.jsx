@@ -33,6 +33,7 @@ const Layout = ({ children }) => {
     { label: 'Relatório Paciente Recorrente', path: '/relatorioPacientesRecorrentes', roles: ['admin'] },
     { label: 'Relatório Produção Médica', path: '/relatorioProducaoMedica', roles: ['admin'] },
     { label: 'Relatório Especialidade', path: '/relatorioConsultasPorEspecialidades', roles: ['admin'] },
+    { label: 'Relatório Diário', path: '/relatorioConsultasPorDia', roles: ['admin'] },
 
 
 
