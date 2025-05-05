@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import {
   Box, Typography, Paper, TextField, Button, Table, TableHead,
-  TableRow, TableCell, TableBody, IconButton, MenuItem, Select
+  TableRow, TableCell, TableBody, IconButton, MenuItem, Select, FormControl, InputLabel
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -17,11 +17,15 @@ const AgendamentosPage = () => {
   const [dataConsulta, setDataConsulta] = useState("");
   const [plataforma, setPlataforma] = useState("");
   const [linkVideo, setLinkVideo] = useState("");
+  const [statusFiltro, setStatusFiltro] = useState("");
   const [editingId, setEditingId] = useState(null);
   const token = localStorage.getItem("token");
 
   const fetchAgendamentos = async () => {
-    const res = await fetch("https://localhost:44327/api/Agendamento", {
+    let url = "https://localhost:44327/api/Agendamento";
+    if (statusFiltro) url += `?status=${statusFiltro}`;
+
+    const res = await fetch(url, {
       headers: { Authorization: `Bearer ${token}` }
     });
     const data = await res.json();
@@ -126,6 +130,25 @@ const AgendamentosPage = () => {
         <Typography variant="h5" gutterBottom>Agendamentos</Typography>
 
         <Paper sx={{ p: 2, mb: 3 }}>
+        <Box display="flex" gap={2} alignItems="center" mb={2}>
+            <FormControl sx={{ minWidth: 200 }}>
+              <InputLabel id="status-label">Status</InputLabel>
+              <Select
+                labelId="status-label"
+                value={statusFiltro}
+                label="Status"
+                onChange={(e) => setStatusFiltro(e.target.value)}
+              >
+                <MenuItem value="">Todos</MenuItem>
+                <MenuItem value="agendado">Agendado</MenuItem>
+                <MenuItem value="realizado">Realizado</MenuItem>
+                <MenuItem value="cancelado">Cancelado</MenuItem>
+              </Select>
+            </FormControl>
+            <Button variant="outlined" onClick={fetchAgendamentos}>Filtrar</Button>
+          </Box>
+
+
           <Select value={medicoId} onChange={e => setMedicoId(e.target.value)} displayEmpty fullWidth sx={{ mb: 2 }}>
             <MenuItem value="" disabled>Selecione o médico</MenuItem>
             {medicos.map(m => (
