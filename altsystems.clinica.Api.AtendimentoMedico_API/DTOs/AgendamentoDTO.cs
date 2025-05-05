@@ -11,5 +11,7 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.DTOs
         public string Status { get; set; }
         public string Plataforma { get; set; }
         public string LinkVideo { get; set; }
+        public bool CheckIn { get; set; }
+
     }
 }

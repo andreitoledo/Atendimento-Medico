@@ -14,7 +14,7 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
 
         public async Task<IEnumerable<Agendamento>> ObterTodos()
         {
-            return await _context.Agendamentos
+            return await _context.Agendamentos               
                 .Include(a => a.Medico).ThenInclude(m => m.Usuario)
                 .Include(a => a.Paciente).ThenInclude(p => p.Usuario)
                 .ToListAsync();
@@ -26,6 +26,7 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
                 .Include(a => a.Medico).ThenInclude(m => m.Usuario)
                 .Include(a => a.Paciente).ThenInclude(p => p.Usuario)
                 .FirstOrDefaultAsync(a => a.Id == id);
+                //.ToListAsync();
         }
 
         public async Task<Agendamento> Criar(Agendamento agendamento)
@@ -50,5 +51,19 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> MarcarCheckIn(int id)
+        {
+            var agendamento = await _context.Agendamentos.FindAsync(id);
+            if (agendamento == null) return false;
+
+            agendamento.CheckIn = true;
+
+            _context.Entry(agendamento).Property(a => a.CheckIn).IsModified = true;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
     }
 }

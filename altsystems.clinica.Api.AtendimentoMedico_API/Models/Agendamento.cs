@@ -10,9 +10,11 @@ public class Agendamento
     public string Plataforma { get; set; }
     public DateTime CriadoEm { get; set; } = DateTime.Now;
 
+    public bool CheckIn { get; set; }
+
     public Medico Medico { get; set; }
     public Paciente Paciente { get; set; }
 
-    public bool CheckIn { get; set; } = false;
+    
 
 }

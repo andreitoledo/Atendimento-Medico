@@ -7,5 +7,8 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.DTOs
         public DateTime DataConsulta { get; set; }
         public string Plataforma { get; set; }
         public string LinkVideo { get; set; }
+
+        public bool CheckIn { get; set; }
+
     }
 }

@@ -2,6 +2,7 @@ using altsystems.clinica.Api.AtendimentoMedico_API.DTOs;
 using altsystems.clinica.Api.AtendimentoMedico_API.Models;
 using altsystems.clinica.Api.AtendimentoMedico_API.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
 {
@@ -30,7 +31,8 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
                 DataConsulta = a.DataConsulta,
                 Status = a.Status,
                 Plataforma = a.Plataforma,
-                LinkVideo = a.LinkVideo
+                LinkVideo = a.LinkVideo,
+                CheckIn = a.CheckIn
             });
 
             return Ok(result);
@@ -52,7 +54,8 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
                 DataConsulta = a.DataConsulta,
                 Status = a.Status,
                 Plataforma = a.Plataforma,
-                LinkVideo = a.LinkVideo
+                LinkVideo = a.LinkVideo,
+                CheckIn = a.CheckIn
             });
         }
 
@@ -98,6 +101,16 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
             await _repository.Atualizar(agendamento);
             return NoContent();
         }
+
+        [HttpPut("{id}/checkin")]
+        public async Task<IActionResult> MarcarCheckIn(int id)
+        {
+            var result = await _repository.MarcarCheckIn(id);
+            if (!result) return NotFound();
+
+            return NoContent();
+        }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAgendamento(int id)
