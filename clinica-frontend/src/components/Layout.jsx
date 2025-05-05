@@ -40,15 +40,15 @@ const Layout = ({ children }) => {
     {
       title: '📊 Relatórios',
       items: [
-        { label: 'Relatorios Faturamentos', path: '/relatoriosFaturamentos', roles: ['admin'] },
+        { label: 'Faturamentos', path: '/relatoriosFaturamentos', roles: ['admin'] },
         { label: 'Dashboard Financeiros', path: '/dashboardFinanceiro', roles: ['admin'] },
-        { label: 'Relatório Médico', path: '/relatorioConsultaMedica', roles: ['admin'] },
-        { label: 'Relatório Comparecimento', path: '/relatorioComparecimento', roles: ['admin'] },
-        { label: 'Relatório Agendamento Período', path: '/relatorioAgendamentosPorPeriodo', roles: ['admin'] },
-        { label: 'Relatório Paciente Recorrente', path: '/relatorioPacientesRecorrentes', roles: ['admin'] },
-        { label: 'Relatório Produção Médica', path: '/relatorioProducaoMedica', roles: ['admin'] },
-        { label: 'Relatório Especialidade', path: '/relatorioConsultasPorEspecialidades', roles: ['admin'] },
-        { label: 'Relatório Diário', path: '/relatorioConsultasPorDia', roles: ['admin'] },
+        { label: 'Consulta Médica', path: '/relatorioConsultaMedica', roles: ['admin'] },
+        { label: 'Comparecimento', path: '/relatorioComparecimento', roles: ['admin'] },
+        { label: 'Agendamento por Período', path: '/relatorioAgendamentosPorPeriodo', roles: ['admin'] },
+        { label: 'Paciente Recorrente', path: '/relatorioPacientesRecorrentes', roles: ['admin'] },
+        { label: 'Produção Médica', path: '/relatorioProducaoMedica', roles: ['admin'] },
+        { label: 'Consulta por Especialidade', path: '/relatorioConsultasPorEspecialidades', roles: ['admin'] },
+        { label: 'Consulta Por Dia', path: '/relatorioConsultasPorDia', roles: ['admin'] },
       ]
     }
   ];
