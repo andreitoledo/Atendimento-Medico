@@ -1,5 +1,8 @@
 import React from 'react';
-import { Box, Drawer, AppBar, Toolbar, Typography, List, ListItem, ListItemText, Button } from '@mui/material';
+import {
+  Box, Drawer, AppBar, Toolbar, Typography, List, ListItem,
+  ListItemText, Button, Divider
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
@@ -14,29 +17,40 @@ const Layout = ({ children }) => {
     role = payload.role || payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
   }
 
-  const menu = [
-    { label: 'Recepção', path: '/recepcao', roles: ['admin', 'medico'] },
-    { label: 'Triagem', path: '/triagem', roles: ['admin', 'medico'] },
-    { label: 'Faturamentos', path: '/faturamentos', roles: ['admin'] },
-    // { label: 'Relatórios', path: '/relatorios', roles: ['admin'] },  
-    { label: 'Especialidades', path: '/especialidades', roles: ['admin'] },
-    { label: 'Medicos', path: '/medicos', roles: ['admin'] },
-    { label: 'Pacientes', path: '/pacientes', roles: ['admin'] },
-    { label: 'Usuarios', path: '/usuarios', roles: ['admin'] },
-    { label: 'Agendamentos', path: '/agendamentos', roles: ['admin'] },
-    { label: 'Consultas Médicas', path: '/consultas', roles: ['admin'] },
-    { label: 'Relatorios Faturamentos', path: '/relatoriosFaturamentos', roles: ['admin'] },
-    { label: 'Dashboard Financeiros', path: '/dashboardFinanceiro', roles: ['admin'] },
-    { label: 'Relatório Médico', path: '/relatorioConsultaMedica', roles: ['admin'] },
-    { label: 'Relatório Comparecimento', path: '/relatorioComparecimento', roles: ['admin'] },
-    { label: 'Relatório Agendamento Período', path: '/relatorioAgendamentosPorPeriodo', roles: ['admin'] },
-    { label: 'Relatório Paciente Recorrente', path: '/relatorioPacientesRecorrentes', roles: ['admin'] },
-    { label: 'Relatório Produção Médica', path: '/relatorioProducaoMedica', roles: ['admin'] },
-    { label: 'Relatório Especialidade', path: '/relatorioConsultasPorEspecialidades', roles: ['admin'] },
-    { label: 'Relatório Diário', path: '/relatorioConsultasPorDia', roles: ['admin'] },
-
-
-
+  const sections = [
+    {
+      title: '📋 Atendimento',
+      items: [
+        { label: 'Recepção', path: '/recepcao', roles: ['admin', 'medico'] },
+        { label: 'Triagem', path: '/triagem', roles: ['admin', 'medico'] },
+        { label: 'Agendamentos', path: '/agendamentos', roles: ['admin'] },
+        { label: 'Consultas Médicas', path: '/consultas', roles: ['admin'] },
+      ]
+    },
+    {
+      title: '⚙️ Administrativo',
+      items: [
+        { label: 'Faturamentos', path: '/faturamentos', roles: ['admin'] },
+        { label: 'Especialidades', path: '/especialidades', roles: ['admin'] },
+        { label: 'Medicos', path: '/medicos', roles: ['admin'] },
+        { label: 'Pacientes', path: '/pacientes', roles: ['admin'] },
+        { label: 'Usuarios', path: '/usuarios', roles: ['admin'] },
+      ]
+    },
+    {
+      title: '📊 Relatórios',
+      items: [
+        { label: 'Relatorios Faturamentos', path: '/relatoriosFaturamentos', roles: ['admin'] },
+        { label: 'Dashboard Financeiros', path: '/dashboardFinanceiro', roles: ['admin'] },
+        { label: 'Relatório Médico', path: '/relatorioConsultaMedica', roles: ['admin'] },
+        { label: 'Relatório Comparecimento', path: '/relatorioComparecimento', roles: ['admin'] },
+        { label: 'Relatório Agendamento Período', path: '/relatorioAgendamentosPorPeriodo', roles: ['admin'] },
+        { label: 'Relatório Paciente Recorrente', path: '/relatorioPacientesRecorrentes', roles: ['admin'] },
+        { label: 'Relatório Produção Médica', path: '/relatorioProducaoMedica', roles: ['admin'] },
+        { label: 'Relatório Especialidade', path: '/relatorioConsultasPorEspecialidades', roles: ['admin'] },
+        { label: 'Relatório Diário', path: '/relatorioConsultasPorDia', roles: ['admin'] },
+      ]
+    }
   ];
 
   const handleLogout = () => {
@@ -62,13 +76,21 @@ const Layout = ({ children }) => {
       >
         <Toolbar />
         <List>
-          {menu
-            .filter(item => role && item.roles.includes(role))
-            .map((item) => (
-              <ListItem button key={item.label} onClick={() => navigate(item.path)}>
-                <ListItemText primary={item.label} />
-              </ListItem>
-            ))}
+          {sections.map((section, idx) => (
+            <React.Fragment key={idx}>
+              <Divider sx={{ my: 1 }} />
+              <Typography variant="caption" sx={{ pl: 2, fontWeight: 'bold', color: 'gray' }}>
+                {section.title}
+              </Typography>
+              {section.items
+                .filter(item => role && item.roles.includes(role))
+                .map((item) => (
+                  <ListItem button key={item.label} onClick={() => navigate(item.path)}>
+                    <ListItemText primary={item.label} />
+                  </ListItem>
+                ))}
+            </React.Fragment>
+          ))}
         </List>
       </Drawer>
 
