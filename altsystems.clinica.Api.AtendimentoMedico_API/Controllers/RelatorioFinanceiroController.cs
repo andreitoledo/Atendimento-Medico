@@ -55,5 +55,6 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
                 Registros = faturamentos
             });
         }
+        
     }
 }

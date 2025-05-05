@@ -2,6 +2,7 @@ using altsystems.clinica.Api.AtendimentoMedico_API.DTOs;
 using altsystems.clinica.Api.AtendimentoMedico_API.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
 
 namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
 {
@@ -132,5 +133,49 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("agendamentos-por-periodo")]
+        public async Task<IActionResult> GetAgendamentosPorPeriodo([FromQuery] DateTime inicio, [FromQuery] DateTime fim)
+        {
+            var agendamentos = await _context.Agendamentos
+                .Include(a => a.Medico).ThenInclude(m => m.Usuario)
+                .Include(a => a.Paciente).ThenInclude(p => p.Usuario)
+                .Where(a => a.DataConsulta >= inicio && a.DataConsulta <= fim)
+                .OrderBy(a => a.DataConsulta)
+                .Select(a => new
+                {
+                    DataConsulta = a.DataConsulta,
+                    Paciente = a.Paciente.Usuario.Nome,
+                    Medico = a.Medico.Usuario.Nome,
+                    Status = a.Status,
+                    Plataforma = a.Plataforma
+                })
+                .ToListAsync();
+
+            return Ok(agendamentos);
+        }
+
+        [HttpGet("exportar-csv")]
+        public async Task<IActionResult> ExportarCsv([FromQuery] DateTime inicio, [FromQuery] DateTime fim)
+        {
+            var registros = await _context.Agendamentos
+                .Where(a => a.DataConsulta >= inicio && a.DataConsulta <= fim)
+                .ToListAsync();
+
+            var sb = new StringBuilder();
+            sb.AppendLine("Data,Paciente,Medico");
+
+            foreach (var a in registros)
+            {
+                sb.AppendLine($"{a.DataConsulta:yyyy-MM-dd},{a.Paciente?.Usuario?.Nome},{a.Medico?.Usuario?.Nome}");
+            }
+
+            var bytes = Encoding.UTF8.GetBytes(sb.ToString());
+            var output = new MemoryStream(bytes);
+
+            return File(output, "text/csv", $"agendamentos_{inicio:yyyyMMdd}_{fim:yyyyMMdd}.csv");
+        }
+
+
     }
 }
