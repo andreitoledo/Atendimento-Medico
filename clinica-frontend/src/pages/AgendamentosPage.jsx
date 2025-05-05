@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import {
   Box, Typography, Paper, TextField, Button, Table, TableHead,
-  TableRow, TableCell, TableBody, IconButton, MenuItem, Select, FormControl, InputLabel
+  TableRow, TableCell, TableBody, IconButton, MenuItem, Select, 
+  FormControl, InputLabel, Autocomplete
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -166,12 +167,21 @@ const AgendamentosPage = () => {
             ))}
           </Select>
 
-          <Select value={pacienteId} onChange={e => setPacienteId(e.target.value)} displayEmpty fullWidth sx={{ mb: 2 }}>
+          {/* <Select value={pacienteId} onChange={e => setPacienteId(e.target.value)} displayEmpty fullWidth sx={{ mb: 2 }}>
             <MenuItem value="" disabled>Selecione o paciente</MenuItem>
             {pacientes.map(p => (
               <MenuItem key={p.id} value={p.id}>{p.nome}</MenuItem>
             ))}
-          </Select>
+          </Select> */}
+
+          <Autocomplete
+            options={pacientes}
+            getOptionLabel={(option) => `${option.nome} - ${option.email}`}
+            onChange={(event, newValue) => setPacienteId(newValue?.id || "")}
+            renderInput={(params) => <TextField {...params} label="Selecione o paciente" fullWidth />}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            sx={{ mb: 2 }} // espaçamento
+          />
 
           <TextField
             label="Data da Consulta"
