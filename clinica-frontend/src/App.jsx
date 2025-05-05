@@ -11,6 +11,7 @@ import UsuariosPage from './pages/UsuariosPage';
 import AgendamentosPage from './pages/AgendamentosPage';
 import ConsultasPage from './pages/ConsultasPage';
 import FaturamentosPage from './pages/FaturamentosPage';
+import RelatorioFaturamentoPage from './pages/RelatorioFaturamentoPage';
 
 
 
@@ -33,6 +34,7 @@ function App() {
             <Route path="/agendamentos" element={<AgendamentosPage />} />
             <Route path="/consultas" element={<ConsultasPage />} />
             <Route path="/faturamentos" element={<FaturamentosPage />} />
+            <Route path="/relatoriosFaturamentos" element={<RelatorioFaturamentoPage />} />
 
 
           </>
