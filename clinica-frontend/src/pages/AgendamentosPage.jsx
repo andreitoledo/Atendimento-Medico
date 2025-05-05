@@ -6,6 +6,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 const AgendamentosPage = () => {
   const [agendamentos, setAgendamentos] = useState([]);
@@ -107,6 +108,18 @@ const AgendamentosPage = () => {
     setEditingId(null);
   };
 
+  // Função para realizar o check-in
+  const handleCheckIn = async (id) => {
+    const res = await fetch(`https://localhost:44327/api/Agendamento/${id}/checkin`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (res.ok) fetchAgendamentos();
+  };
+
   return (
     <Layout>
       <Box>
@@ -153,6 +166,7 @@ const AgendamentosPage = () => {
           <Button variant="contained" onClick={handleSubmit}>
             {editingId ? "Atualizar" : "Agendar"}
           </Button>
+          {editingId && <Button onClick={resetForm}>Cancelar</Button>}
         </Paper>
 
         <Paper>
@@ -165,6 +179,7 @@ const AgendamentosPage = () => {
                 <TableCell>Data</TableCell>
                 <TableCell>Plataforma</TableCell>
                 <TableCell>Status</TableCell>
+                <TableCell>Check-in</TableCell>
                 <TableCell>Ações</TableCell>
               </TableRow>
             </TableHead>
@@ -177,13 +192,16 @@ const AgendamentosPage = () => {
                   <TableCell>{new Date(a.dataConsulta).toLocaleString("pt-BR")}</TableCell>
                   <TableCell>{a.plataforma}</TableCell>
                   <TableCell>{a.status}</TableCell>
-                  <TableCell style={{ display: "flex", gap: 8 }}>
-                    <IconButton onClick={() => handleEdit(a)}>
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton onClick={() => handleDelete(a.id)}>
-                      <DeleteIcon />
-                    </IconButton>
+
+                  <TableCell>{a.checkIn ? "Sim" : "Não"}</TableCell>
+                  <TableCell sx={{ display: "flex", gap: 1 }}>
+                    {!a.checkIn && (
+                      <IconButton onClick={() => handleCheckIn(a.id)} title="Realizar Check-In">
+                        <CheckCircleIcon />
+                      </IconButton>
+                    )}
+                    <IconButton onClick={() => handleEdit(a)}><EditIcon /></IconButton>
+                    <IconButton onClick={() => handleDelete(a.id)}><DeleteIcon /></IconButton>
                   </TableCell>
                 </TableRow>
               ))}

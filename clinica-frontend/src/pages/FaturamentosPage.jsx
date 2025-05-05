@@ -1,9 +1,10 @@
+
 import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import {
-  Box, Typography, Paper, TextField, Button, Select,
-  MenuItem, Table, TableHead, TableRow, TableCell,
-  TableBody, IconButton, InputLabel, FormControl
+  Box, Typography, Paper, TextField, Button,
+  Table, TableHead, TableRow, TableCell, TableBody,
+  IconButton, Select, MenuItem
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -11,14 +12,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 const FaturamentosPage = () => {
   const [faturamentos, setFaturamentos] = useState([]);
   const [agendamentos, setAgendamentos] = useState([]);
-  const [editingId, setEditingId] = useState(null);
-
   const [agendamentoId, setAgendamentoId] = useState("");
-  const [data, setData] = useState("");
+  const [descricao, setDescricao] = useState("");
   const [valor, setValor] = useState("");
   const [formaPagamento, setFormaPagamento] = useState("");
-  const [descricao, setDescricao] = useState("");
-
+  const [editingId, setEditingId] = useState(null);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -39,37 +37,38 @@ const FaturamentosPage = () => {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
-    setAgendamentos(data);
+
+    const faturadosIds = faturamentos.map(f => f.agendamentoId);
+    const filtrados = data.filter(a => a.checkIn && !faturadosIds.includes(a.id));
+    setAgendamentos(filtrados);
   };
 
   const resetForm = () => {
     setAgendamentoId("");
-    setData("");
+    setDescricao("");
     setValor("");
     setFormaPagamento("");
-    setDescricao("");
     setEditingId(null);
   };
 
-  const handleSubmit = async () => {
-    if (!agendamentoId || !data || !valor || !formaPagamento || !descricao) return;
+  const handleSalvar = async () => {
+    if (!agendamentoId || !valor || !formaPagamento) return;
 
     const agendamento = agendamentos.find(a => a.id === parseInt(agendamentoId));
-    if (!agendamento) return;
-
     const payload = {
       agendamentoId: parseInt(agendamentoId),
       pacienteId: agendamento.pacienteId,
-      data,
+      data: new Date().toISOString(),
       valor: parseFloat(valor),
       formaPagamento,
-      descricao,
+      descricao
     };
 
-    const method = editingId ? "PUT" : "POST";
     const url = editingId
       ? `https://localhost:44327/api/Faturamento/${editingId}`
-      : `https://localhost:44327/api/Faturamento`;
+      : "https://localhost:44327/api/Faturamento";
+
+    const method = editingId ? "PUT" : "POST";
 
     const res = await fetch(url, {
       method,
@@ -81,18 +80,17 @@ const FaturamentosPage = () => {
     });
 
     if (res.ok) {
-      fetchFaturamentos();
       resetForm();
+      fetchFaturamentos();
     }
   };
 
   const handleEdit = (f) => {
-    setEditingId(f.id);
     setAgendamentoId(f.agendamentoId);
-    setData(f.data.slice(0, 16)); // yyyy-MM-ddTHH:mm
+    setDescricao(f.descricao);
     setValor(f.valor);
     setFormaPagamento(f.formaPagamento);
-    setDescricao(f.descricao);
+    setEditingId(f.id);
   };
 
   const handleDelete = async (id) => {
@@ -100,10 +98,8 @@ const FaturamentosPage = () => {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });
-    if (res.ok) {
-      fetchFaturamentos();
-      resetForm();
-    }
+
+    if (res.ok) fetchFaturamentos();
   };
 
   return (
@@ -112,55 +108,52 @@ const FaturamentosPage = () => {
         <Typography variant="h5" gutterBottom>Faturamentos</Typography>
 
         <Paper sx={{ p: 2, mb: 3 }}>
-          <FormControl fullWidth sx={{ mb: 2 }}>
-            <InputLabel>Agendamento</InputLabel>
-            <Select
-              value={agendamentoId}
-              label="Agendamento"
-              onChange={(e) => setAgendamentoId(e.target.value)}
-            >
-              {agendamentos.map((a) => (
-                <MenuItem key={a.id} value={a.id}>
-                  {`${a.nomePaciente} com ${a.nomeMedico}`}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <TextField
-            label="Data"
-            type="datetime-local"
+          <Select
+            value={agendamentoId}
+            onChange={(e) => setAgendamentoId(e.target.value)}
+            displayEmpty
             fullWidth
             sx={{ mb: 2 }}
-            InputLabelProps={{ shrink: true }}
-            value={data}
-            onChange={(e) => setData(e.target.value)}
+          >
+            <MenuItem value="" disabled>Selecione o agendamento</MenuItem>
+            {agendamentos.map((a) => (
+              <MenuItem key={a.id} value={a.id}>
+                {a.nomePaciente} com {a.nomeMedico}
+              </MenuItem>
+            ))}
+          </Select>
+
+          <TextField
+            label="Descrição"
+            value={descricao}
+            onChange={(e) => setDescricao(e.target.value)}
+            fullWidth sx={{ mb: 2 }}
           />
           <TextField
             label="Valor"
             type="number"
-            fullWidth
-            sx={{ mb: 2 }}
             value={valor}
             onChange={(e) => setValor(e.target.value)}
+            fullWidth sx={{ mb: 2 }}
           />
-          <TextField
-            label="Forma de Pagamento"
-            fullWidth
-            sx={{ mb: 2 }}
+
+          <Select
             value={formaPagamento}
             onChange={(e) => setFormaPagamento(e.target.value)}
-          />
-          <TextField
-            label="Descrição"
-            fullWidth
-            sx={{ mb: 2 }}
-            value={descricao}
-            onChange={(e) => setDescricao(e.target.value)}
-          />
-          <Button variant="contained" onClick={handleSubmit}>
-            {editingId ? "Atualizar" : "Salvar"}
-          </Button>
+            displayEmpty
+            fullWidth sx={{ mb: 2 }}
+          >
+            <MenuItem value="" disabled>Forma de Pagamento</MenuItem>
+            <MenuItem value="Dinheiro">Dinheiro</MenuItem>
+            <MenuItem value="Pix">Pix</MenuItem>
+            <MenuItem value="Cartão">Cartão</MenuItem>
+            <MenuItem value="Outros">Outros</MenuItem>
+          </Select>
+
+          <Box display="flex" gap={2}>
+            <Button variant="contained" onClick={handleSalvar}>Salvar</Button>
+            <Button onClick={resetForm}>Cancelar</Button>
+          </Box>
         </Paper>
 
         <Paper>
@@ -173,7 +166,6 @@ const FaturamentosPage = () => {
                 <TableCell>Data</TableCell>
                 <TableCell>Valor (R$)</TableCell>
                 <TableCell>Forma</TableCell>
-                <TableCell>Descrição</TableCell>
                 <TableCell>Ações</TableCell>
               </TableRow>
             </TableHead>
@@ -184,9 +176,8 @@ const FaturamentosPage = () => {
                   <TableCell>{f.pacienteNome}</TableCell>
                   <TableCell>{f.medicoNome}</TableCell>
                   <TableCell>{new Date(f.data).toLocaleString()}</TableCell>
-                  <TableCell>{f.valor.toFixed(2)}</TableCell>
+                  <TableCell>{f.valor}</TableCell>
                   <TableCell>{f.formaPagamento}</TableCell>
-                  <TableCell>{f.descricao}</TableCell>
                   <TableCell sx={{ display: "flex", gap: 1 }}>
                     <IconButton onClick={() => handleEdit(f)}><EditIcon /></IconButton>
                     <IconButton onClick={() => handleDelete(f.id)}><DeleteIcon /></IconButton>
