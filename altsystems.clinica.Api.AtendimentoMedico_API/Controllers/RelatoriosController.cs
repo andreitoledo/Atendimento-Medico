@@ -37,16 +37,22 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
         {
             var result = await _context.Agendamentos
                 .Include(a => a.Medico).ThenInclude(m => m.Usuario)
-                .GroupBy(a => new { a.Medico.Usuario.Nome })
+                .GroupBy(a => new
+                {
+                    Nome = a.Medico.Usuario.Nome,
+                    Especialidade = a.Medico.Especialidade
+                })
                 .Select(g => new RelatorioConsultaDTO
                 {
                     NomeMedico = g.Key.Nome,
+                    Especialidade = g.Key.Especialidade,
                     TotalConsultas = g.Count()
                 })
                 .ToListAsync();
 
             return Ok(result);
         }
+
 
         [HttpGet("consultas-por-especialidade")]
         public async Task<ActionResult<IEnumerable<RelatorioConsultaDTO>>> ConsultasPorEspecialidade()
