@@ -21,6 +21,8 @@ import RelatorioProducaoMedicaPage from './pages/RelatorioProducaoMedicaPage';
 import RelatorioConsultasPorEspecialidadesPage from './pages/RelatorioConsultasPorEspecialidadesPage';
 import RelatorioConsultasPorDiaPage from './pages/RelatorioConsultasPorDiaPage';
 import ProntuarioClinicoPage from './pages/ProntuarioClinicoPage';
+import ProntuarioPsicologoPage from './pages/ProntuarioPsicologoPage';
+import ProntuarioPsiquiatraPage from './pages/ProntuarioPsiquiatraPage';
 
 
 function App() {
@@ -52,6 +54,8 @@ function App() {
             <Route path="/relatorioConsultasPorEspecialidades" element={<RelatorioConsultasPorEspecialidadesPage />} />
             <Route path="/relatorioConsultasPorDia" element={<RelatorioConsultasPorDiaPage />} />
             <Route path="/prontuario-clinico/:id" element={<ProntuarioClinicoPage />} />
+            <Route path="/prontuario-psicologo/:id" element={<ProntuarioPsicologoPage />} />
+            <Route path="/prontuario-psiquiatra/:id" element={<ProntuarioPsiquiatraPage />} />
 
             
             
