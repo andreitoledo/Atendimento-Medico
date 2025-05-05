@@ -88,20 +88,26 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
         }
 
         [HttpGet("producao-medica")]
-        public async Task<ActionResult<IEnumerable<RelatorioConsultaDTO>>> ProducaoMedica()
+        public async Task<IActionResult> ProducaoMedica()
         {
             var result = await _context.Agendamentos
                 .Include(a => a.Medico).ThenInclude(m => m.Usuario)
-                .GroupBy(a => new { a.Medico.Usuario.Nome })
+                .GroupBy(a => new
+                {
+                    NomeMedico = a.Medico.Usuario.Nome,
+                    Especialidade = a.Medico.Especialidade
+                })
                 .Select(g => new RelatorioConsultaDTO
                 {
-                    NomeMedico = g.Key.Nome,
+                    NomeMedico = g.Key.NomeMedico,
+                    Especialidade = g.Key.Especialidade,
                     TotalConsultas = g.Count()
                 })
                 .ToListAsync();
 
             return Ok(result);
         }
+
 
         [HttpGet("comparecimentos")]
         public async Task<ActionResult<IEnumerable<RelatorioComparecimentoDTO>>> Comparecimentos()
