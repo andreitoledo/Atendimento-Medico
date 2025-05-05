@@ -20,7 +20,7 @@ import RelatorioPacientesRecorrentesPage from './pages/RelatorioPacientesRecorre
 import RelatorioProducaoMedicaPage from './pages/RelatorioProducaoMedicaPage';
 import RelatorioConsultasPorEspecialidadesPage from './pages/RelatorioConsultasPorEspecialidadesPage';
 import RelatorioConsultasPorDiaPage from './pages/RelatorioConsultasPorDiaPage';
-
+import ProntuarioClinicoPage from './pages/ProntuarioClinicoPage';
 
 
 function App() {
@@ -51,7 +51,8 @@ function App() {
             <Route path="/relatorioProducaoMedica" element={<RelatorioProducaoMedicaPage />} />
             <Route path="/relatorioConsultasPorEspecialidades" element={<RelatorioConsultasPorEspecialidadesPage />} />
             <Route path="/relatorioConsultasPorDia" element={<RelatorioConsultasPorDiaPage />} />
-            
+            <Route path="/prontuario-clinico/:id" element={<ProntuarioClinicoPage />} />
+
             
             
 
