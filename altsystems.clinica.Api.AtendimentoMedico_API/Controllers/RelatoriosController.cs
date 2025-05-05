@@ -21,12 +21,22 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
         public async Task<ActionResult<IEnumerable<RelatorioConsultaDTO>>> ConsultasPorDia(DateTime inicio, DateTime fim)
         {
             var result = await _context.Agendamentos
+                .Include(a => a.Medico).ThenInclude(m => m.Usuario)
                 .Where(a => a.DataConsulta.Date >= inicio.Date && a.DataConsulta.Date <= fim.Date)
-                .GroupBy(a => a.DataConsulta.Date)
+                .GroupBy(a => new
+                {
+                    Dia = a.DataConsulta.Date,
+                    Nome = a.Medico.Usuario.Nome,
+                    Especialidade = a.Medico.Especialidade
+                })      
+
                 .Select(g => new RelatorioConsultaDTO
                 {
-                    Dia = g.Key,
+                    Dia = g.Key.Dia,
+                    NomeMedico = g.Key.Nome,
+                    Especialidade = g.Key.Especialidade,
                     TotalConsultas = g.Count()
+
                 })
                 .ToListAsync();
 
