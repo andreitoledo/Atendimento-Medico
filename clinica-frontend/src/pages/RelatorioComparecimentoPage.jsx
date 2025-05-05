@@ -20,7 +20,7 @@ const RelatorioComparecimentoPage = () => {
   }, []);
 
   const buscarDados = async () => {
-    const res = await fetch("https://localhost:44327/api/Relatorios/comparecimento", {
+    const res = await fetch("https://localhost:44327/api/Relatorios/comparecimentos", {
       headers: { Authorization: `Bearer ${token}` }
     });
     if (res.ok) {

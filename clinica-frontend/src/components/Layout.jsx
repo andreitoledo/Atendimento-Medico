@@ -29,6 +29,7 @@ const Layout = ({ children }) => {
     { label: 'Dashboard Financeiros', path: '/dashboardFinanceiro', roles: ['admin'] },
     { label: 'Relatório Médico', path: '/relatorioConsultaMedica', roles: ['admin'] },
     { label: 'Relatório Comparecimento', path: '/relatorioComparecimento', roles: ['admin'] },
+    { label: 'Relatório Agendamento Período', path: '/relatorioAgendamentosPorPeriodo', roles: ['admin'] },
 
 
   ];

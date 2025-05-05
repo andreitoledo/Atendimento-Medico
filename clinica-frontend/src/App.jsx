@@ -15,6 +15,7 @@ import RelatorioFaturamentoPage from './pages/RelatorioFaturamentoPage';
 import DashboardFinanceiroPage from './pages/DashboardFinanceiroPage';
 import RelatorioConsultasMedicoPage from './pages/RelatorioConsultasMedicoPage';
 import RelatorioComparecimentoPage from './pages/RelatorioComparecimentoPage';
+import RelatorioAgendamentosPorPeriodoPage from './pages/RelatorioAgendamentosPorPeriodoPage';
 
 
 
@@ -41,6 +42,7 @@ function App() {
             <Route path="/dashboardFinanceiro" element={<DashboardFinanceiroPage />} />
             <Route path="/relatorioConsultaMedica" element={<RelatorioConsultasMedicoPage />} />
             <Route path="/relatorioComparecimento" element={<RelatorioComparecimentoPage />} />
+            <Route path="/relatorioAgendamentosPorPeriodo" element={<RelatorioAgendamentosPorPeriodoPage />} />
             
 
 
