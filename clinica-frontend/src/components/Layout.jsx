@@ -30,6 +30,7 @@ const Layout = ({ children }) => {
     { label: 'Relatório Médico', path: '/relatorioConsultaMedica', roles: ['admin'] },
     { label: 'Relatório Comparecimento', path: '/relatorioComparecimento', roles: ['admin'] },
     { label: 'Relatório Agendamento Período', path: '/relatorioAgendamentosPorPeriodo', roles: ['admin'] },
+    { label: 'Relatório Paciente Recorrente', path: '/relatorioPacientesRecorrentes', roles: ['admin'] },
 
 
   ];
