@@ -24,6 +24,7 @@ import ProntuarioClinicoPage from './pages/ProntuarioClinicoPage';
 import ProntuarioPsicologoPage from './pages/ProntuarioPsicologoPage';
 import ProntuarioPsiquiatraPage from './pages/ProntuarioPsiquiatraPage';
 import PagamentoForm from './pages/PagamentoForm';
+import FinanceiroDashboard from './pages/FinanceiroDashboard';
 
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
             <Route path="/prontuario-psicologo/:id" element={<ProntuarioPsicologoPage />} />
             <Route path="/prontuario-psiquiatra/:id" element={<ProntuarioPsiquiatraPage />} />
             <Route path="/pagamentoForm" element={<PagamentoForm />} />
+            <Route path="/financeiroDashboard" element={<FinanceiroDashboard />} />
             
             
 
