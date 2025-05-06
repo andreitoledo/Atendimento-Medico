@@ -21,5 +21,16 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
             var result = await _pagamentoService.SimularPagamentoAsync(dto);
             return Ok(result);
         }
+
+        [HttpPost("conciliar/{agendamentoId}")]
+        public async Task<IActionResult> ConciliarPagamento(int agendamentoId)
+        {
+            var result = await _pagamentoService.ConciliarPagamentoAsync(agendamentoId);
+            if (!result.Sucesso)
+                return NotFound(result);
+
+            return Ok(result);
+        }
     }
+
 }

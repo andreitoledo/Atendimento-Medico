@@ -2,6 +2,7 @@ using altsystems.clinica.Api.AtendimentoMedico_API.DTOs;
 using altsystems.clinica.Api.AtendimentoMedico_API.Data;
 using altsystems.clinica.Api.AtendimentoMedico_API.Models;
 using System;
+using Microsoft.EntityFrameworkCore;
 
 namespace altsystems.clinica.Api.AtendimentoMedico_API.Services
 {
@@ -49,5 +50,43 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Services
                 faturamento.CodigoTransacao
             };
         }
+
+        public async Task<ConciliacaoResultadoDTO> ConciliarPagamentoAsync(int agendamentoId)
+        {
+            var faturamento = await _context.Faturamentos
+                .Where(f => f.AgendamentoId == agendamentoId && f.StatusPagamento == "Aguardando")
+                .FirstOrDefaultAsync();
+
+            if (faturamento == null)
+            {
+                return new ConciliacaoResultadoDTO
+                {
+                    Sucesso = false,
+                    Mensagem = "Pagamento não encontrado ou já conciliado."
+                };
+            }
+
+            faturamento.StatusPagamento = "Pago";
+            await _context.SaveChangesAsync();
+
+            return new ConciliacaoResultadoDTO
+            {
+                Sucesso = true,
+                Mensagem = "Pagamento conciliado com sucesso.",
+                FaturamentoId = faturamento.Id,
+                Valor = faturamento.Valor
+            };
+        }
     }
+
+    public class ConciliacaoResultadoDTO
+    {
+        public bool Sucesso { get; set; }
+        public string Mensagem { get; set; } = null!;
+        public int? FaturamentoId { get; set; }
+        public decimal? Valor { get; set; }
+    }
+
+
+
 }
