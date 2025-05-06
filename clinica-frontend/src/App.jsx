@@ -28,6 +28,8 @@ import DashboardFinanceiroConciliacaoPage from './pages/DashboardFinanceiroConci
 import HistoricoEdicoesPage from './pages/HistoricoEdicoesPage';
 import TriagensListagemPage from './pages/TriagensListagemPage';
 import TriagemEditarPage from './pages/TriagemEditarPage';
+import AgendaPage from './pages/AgendaPage';
+import SalasPage from './pages/SalasPage';
 
 
 function App() {
@@ -66,6 +68,8 @@ function App() {
             <Route path="/historico-edicoes/:pacienteId" element={<HistoricoEdicoesPage />} />
             <Route path="/triagens" element={<TriagensListagemPage />} />
             <Route path="/triagem/editar/:id" element={<TriagemEditarPage />} />
+            <Route path="/agendaPage" element={<AgendaPage />} />  
+            <Route path="/salasPage" element={<SalasPage />} />  
 
             
 

@@ -25,6 +25,9 @@ const Layout = ({ children }) => {
         { label: 'Triagem', path: '/triagem', roles: ['admin', 'medico'] },
         { label: 'Agendamentos', path: '/agendamentos', roles: ['admin'] },
         { label: 'Consultas Médicas', path: '/consultas', roles: ['admin', 'medico'] },
+        { label: 'Agenda', path: '/agendaPage', roles: ['admin', 'medico'] }, 
+        { label: 'Salas', path: '/SalasPage', roles: ['admin', 'medico'] },        
+
       ]
     },
     {
