@@ -26,6 +26,7 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Data
         public DbSet<Prescricao> Prescricoes { get; set; }
         public DbSet<Exame> Exames { get; set; }
         public DbSet<HistoricoEdicao> HistoricoEdicoes { get; set; }
+        public DbSet<Sala> Salas { get; set; } // Adicionando a DbSet para Sala
 
 
 
@@ -54,6 +55,7 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Data
             modelBuilder.Entity<Prescricao>().ToTable("Prescricoes");
             modelBuilder.Entity<Exame>().ToTable("Exames");
             modelBuilder.Entity<HistoricoEdicao>().ToTable("HistoricoEdicoes");
+            modelBuilder.Entity<Sala>().ToTable("Salas"); // Mapeando a tabela Sala
 
 
 
