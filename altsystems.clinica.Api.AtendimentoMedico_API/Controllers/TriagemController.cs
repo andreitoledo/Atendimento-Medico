@@ -1,19 +1,27 @@
+using altsystems.clinica.Api.AtendimentoMedico_API.Data;
 using altsystems.clinica.Api.AtendimentoMedico_API.DTOs;
 using altsystems.clinica.Api.AtendimentoMedico_API.Models;
 using altsystems.clinica.Api.AtendimentoMedico_API.Repositories;
+using altsystems.clinica.Api.AtendimentoMedico_API.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class TriagemController : ControllerBase
-    {
+    {      
         private readonly ITriagemRepository _repository;
+        private readonly ClinicaContext _context;
+        private readonly HistoricoEdicaoService _historicoService;
 
-        public TriagemController(ITriagemRepository repository)
+        public TriagemController(ITriagemRepository repository, ClinicaContext context, HistoricoEdicaoService historicoService)
         {
             _repository = repository;
+            _context = context;
+            _historicoService = historicoService;
         }
 
         [HttpGet]
@@ -85,23 +93,45 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, TriagemCreateDTO dto)
         {
-            var triagem = await _repository.ObterPorId(id);
-            if (triagem == null) return NotFound();
+            var triagemAtual = await _context.Triagens
+                .Include(t => t.Agendamento)
+                .FirstOrDefaultAsync(t => t.Id == id);
 
-            triagem.DataTriagem = dto.DataTriagem;
-            triagem.PressaoArterial = dto.PressaoArterial;
-            triagem.FrequenciaCardiaca = dto.FrequenciaCardiaca;
-            triagem.Temperatura = dto.Temperatura;
-            triagem.SaturacaoOxigenio = dto.SaturacaoOxigenio;
-            triagem.Peso = dto.Peso;
-            triagem.Altura = dto.Altura;
-            triagem.IMC = dto.IMC;
-            triagem.QueixaInicial = dto.QueixaInicial;
-            triagem.Prioridade = dto.Prioridade;
+            if (triagemAtual == null) return NotFound();
 
-            await _repository.Atualizar(triagem);
+            // Snapshot antes
+            var triagemAntes = JsonConvert.DeserializeObject<Triagem>(
+                JsonConvert.SerializeObject(triagemAtual)
+            );
+
+            // Atualizar campos
+            triagemAtual.DataTriagem = dto.DataTriagem;
+            triagemAtual.PressaoArterial = dto.PressaoArterial;
+            triagemAtual.FrequenciaCardiaca = dto.FrequenciaCardiaca;
+            triagemAtual.Temperatura = dto.Temperatura;
+            triagemAtual.SaturacaoOxigenio = dto.SaturacaoOxigenio;
+            triagemAtual.Peso = dto.Peso;
+            triagemAtual.Altura = dto.Altura;
+            triagemAtual.IMC = dto.IMC;
+            triagemAtual.QueixaInicial = dto.QueixaInicial;
+            triagemAtual.Prioridade = dto.Prioridade;
+
+            await _context.SaveChangesAsync();
+
+            int usuarioLogadoId = 1; // recuperar do JWT em produção
+
+            await _historicoService.RegistrarAlteracao(
+                "Triagem",
+                triagemAtual.Agendamento.PacienteId,
+                triagemAtual.Id,
+                triagemAntes,
+                triagemAtual,
+                usuarioLogadoId
+            );
+
             return NoContent();
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
@@ -110,5 +140,7 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
             if (!removido) return NotFound();
             return NoContent();
         }
+
+
     }
 }

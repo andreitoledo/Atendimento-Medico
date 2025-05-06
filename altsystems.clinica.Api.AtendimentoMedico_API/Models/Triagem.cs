@@ -6,6 +6,7 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Models
     {
         public int Id { get; set; }
         public int AgendamentoId { get; set; }
+        public Agendamento Agendamento { get; set; }
         public DateTime DataTriagem { get; set; }
         public string PressaoArterial { get; set; }
         public int FrequenciaCardiaca { get; set; }

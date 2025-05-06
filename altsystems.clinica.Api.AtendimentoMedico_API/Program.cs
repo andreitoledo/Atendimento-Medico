@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
 using System.Text;
 using QuestPDF.Infrastructure;
+using altsystems.clinica.Api.AtendimentoMedico_API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,6 +72,8 @@ builder.Services.AddScoped<IHistoricoEdicaoRepository, HistoricoEdicaoRepository
 builder.Services.AddScoped<ReciboPdfService>();
 builder.Services.AddScoped<PagamentoService>();
 builder.Services.AddScoped<FinanceiroService>();
+builder.Services.AddClinicaServices();
+
 
 
 // Banco de dados
