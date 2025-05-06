@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import {
@@ -16,6 +15,8 @@ const FaturamentosPage = () => {
   const [descricao, setDescricao] = useState("");
   const [valor, setValor] = useState("");
   const [formaPagamento, setFormaPagamento] = useState("");
+  const [statusPagamento, setStatusPagamento] = useState("");
+  const [codigoTransacao, setCodigoTransacao] = useState("");
   const [editingId, setEditingId] = useState(null);
   const token = localStorage.getItem("token");
 
@@ -37,14 +38,8 @@ const FaturamentosPage = () => {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await res.json();
-
-    // Aplicar filtro: apenas agendamentos com checkIn = true
     const agendamentosComCheckin = data.filter((a) => a.checkIn === true);
     setAgendamentos(agendamentosComCheckin);
-
-    // const faturadosIds = faturamentos.map(f => f.agendamentoId);
-    // const filtrados = data.filter(a => a.checkIn && !faturadosIds.includes(a.id));
-    // setAgendamentos(filtrados);
   };
 
   const resetForm = () => {
@@ -52,6 +47,8 @@ const FaturamentosPage = () => {
     setDescricao("");
     setValor("");
     setFormaPagamento("");
+    setStatusPagamento("");
+    setCodigoTransacao("");
     setEditingId(null);
   };
 
@@ -65,7 +62,9 @@ const FaturamentosPage = () => {
       data: new Date().toISOString(),
       valor: parseFloat(valor),
       formaPagamento,
-      descricao
+      descricao,
+      statusPagamento: statusPagamento || "Pendente",
+      codigoTransacao
     };
 
     const url = editingId
@@ -86,6 +85,10 @@ const FaturamentosPage = () => {
     if (res.ok) {
       resetForm();
       fetchFaturamentos();
+    } else {
+      const erro = await res.text();
+      console.error("Erro ao salvar:", erro);
+      alert("Erro ao salvar faturamento");
     }
   };
 
@@ -94,6 +97,8 @@ const FaturamentosPage = () => {
     setDescricao(f.descricao);
     setValor(f.valor);
     setFormaPagamento(f.formaPagamento);
+    setStatusPagamento(f.statusPagamento || "");
+    setCodigoTransacao(f.codigoTransacao || "");
     setEditingId(f.id);
   };
 
@@ -153,6 +158,26 @@ const FaturamentosPage = () => {
             <MenuItem value="Cartão">Cartão</MenuItem>
             <MenuItem value="Outros">Outros</MenuItem>
           </Select>
+
+          <Select
+            value={statusPagamento}
+            onChange={(e) => setStatusPagamento(e.target.value)}
+            displayEmpty
+            fullWidth sx={{ mb: 2 }}
+          >
+            <MenuItem value="" disabled>Status do Pagamento</MenuItem>
+            <MenuItem value="Pendente">Pendente</MenuItem>
+            <MenuItem value="Aguardando">Aguardando</MenuItem>
+            <MenuItem value="Pago">Pago</MenuItem>
+          </Select>
+
+          <TextField
+            label="Código da Transação"
+            value={codigoTransacao}
+            onChange={(e) => setCodigoTransacao(e.target.value)}
+            fullWidth sx={{ mb: 2 }}
+          />
+
 
           <Box display="flex" gap={2}>
             <Button variant="contained" onClick={handleSalvar}>Salvar</Button>
