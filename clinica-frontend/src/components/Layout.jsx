@@ -57,8 +57,8 @@ const Layout = ({ children }) => {
         { label: 'Prontuario Clinico', path: '/prontuario-clinico/:id', roles: ['admin', 'medico'] },
         { label: 'Prontuario Psicologo', path: '/prontuario-psicologo/:id', roles: ['admin', 'medico'] },
         { label: 'Prontuario Psiquiatra', path: '/prontuario-psiquiatra/:id', roles: ['admin'] },
-        { label: 'Pagamentos', path: '/pagamentoForm', roles: ['admin'] },
-        { label: 'Conciliação', path: '/financeiroDashboard', roles: ['admin'] },
+        { label: 'Pagamentos', path: '/pagamentoForm', roles: ['admin'] },        
+        { label: 'Dashboard Conciliação', path: '/dashboardFinanceiroConciliacaoPage', roles: ['admin'] },
       ]
     },
   ];
