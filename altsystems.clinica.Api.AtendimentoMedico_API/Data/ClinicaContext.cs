@@ -25,6 +25,7 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Data
         public DbSet<Consulta> Consultas { get; set; }
         public DbSet<Prescricao> Prescricoes { get; set; }
         public DbSet<Exame> Exames { get; set; }
+        public DbSet<HistoricoEdicao> HistoricoEdicoes { get; set; }
 
 
 
@@ -52,6 +53,7 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Data
             modelBuilder.Entity<Consulta>().ToTable("Consultas");
             modelBuilder.Entity<Prescricao>().ToTable("Prescricoes");
             modelBuilder.Entity<Exame>().ToTable("Exames");
+            modelBuilder.Entity<HistoricoEdicao>().ToTable("HistoricoEdicoes");
 
 
 
