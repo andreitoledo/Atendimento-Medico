@@ -17,7 +17,8 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Models
         public Paciente Paciente { get; set; }
 
         // Para Pagamentos
-        public string CodigoTransacao { get; internal set; }
-        public string StatusPagamento { get; internal set; }
+        public string? CodigoTransacao { get; set; }
+        public string? StatusPagamento { get; set; }
+
     }
 }

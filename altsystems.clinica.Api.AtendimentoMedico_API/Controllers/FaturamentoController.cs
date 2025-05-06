@@ -29,8 +29,10 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
                 Valor = f.Valor,
                 FormaPagamento = f.FormaPagamento,
                 Descricao = f.Descricao,
-                PacienteNome = f.Agendamento?.Paciente?.Usuario?.Nome,
-                MedicoNome = f.Agendamento?.Medico?.Usuario?.Nome
+                StatusPagamento = f.StatusPagamento,
+                CodigoTransacao = f.CodigoTransacao,
+                PacienteNome = f.Agendamento?.Paciente?.Usuario?.Nome ?? "Desconhecido",
+                MedicoNome = f.Agendamento?.Medico?.Usuario?.Nome ?? "Desconhecido"
             }));
         }
 
@@ -80,10 +82,13 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
                 Data = dto.Data,
                 Valor = dto.Valor,
                 FormaPagamento = dto.FormaPagamento,
-                Descricao = dto.Descricao
+                Descricao = dto.Descricao,
+                StatusPagamento = string.IsNullOrEmpty(dto.StatusPagamento) ? "Pendente" : dto.StatusPagamento,
+                CodigoTransacao = dto.CodigoTransacao // pode vir null
             };
 
             var criado = await _repository.Criar(novo);
+
             return CreatedAtAction(nameof(Get), new { id = criado.Id }, new FaturamentoDTO
             {
                 Id = criado.Id,
@@ -92,7 +97,9 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
                 Data = criado.Data,
                 Valor = criado.Valor,
                 FormaPagamento = criado.FormaPagamento,
-                Descricao = criado.Descricao
+                Descricao = criado.Descricao,
+                StatusPagamento = criado.StatusPagamento,
+                CodigoTransacao = criado.CodigoTransacao
             });
         }
 
@@ -108,6 +115,9 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
             item.Valor = dto.Valor;
             item.FormaPagamento = dto.FormaPagamento;
             item.Descricao = dto.Descricao;
+            item.StatusPagamento = dto.StatusPagamento;
+            item.CodigoTransacao = dto.CodigoTransacao;
+
 
             await _repository.Atualizar(item);
             return NoContent();

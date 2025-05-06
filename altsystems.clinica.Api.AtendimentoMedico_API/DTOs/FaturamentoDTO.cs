@@ -13,5 +13,9 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.DTOs
         public string? Descricao { get; set; }
         public string? PacienteNome { get; set; }
         public string? MedicoNome { get; set; }
+
+        public string? StatusPagamento { get; set; }
+        public string? CodigoTransacao { get; set; }
+
     }
 }
