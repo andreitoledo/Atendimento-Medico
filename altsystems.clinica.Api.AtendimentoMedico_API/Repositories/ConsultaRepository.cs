@@ -89,6 +89,23 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
             return true;
         }
 
+        public async Task<ReciboDTO?> ObterReciboPorConsultaIdAsync(int consultaId)
+        {
+            var dto = await _context.Consultas
+                .Where(c => c.Id == consultaId)
+                .Select(c => new ReciboDTO
+                {
+                    NomePaciente = c.Agendamento.Paciente.Usuario.Nome,
+                    NomeMedico = c.Agendamento.Medico.Usuario.Nome,
+                    DataConsulta = c.DataConsulta,
+                    Valor = c.Agendamento.ValorConsulta,
+                    Observacoes = c.Diagnostico
+                })
+                .FirstOrDefaultAsync();
+
+            return dto;
+        }
+
 
 
     }

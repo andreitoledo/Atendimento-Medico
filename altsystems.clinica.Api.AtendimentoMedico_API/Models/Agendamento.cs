@@ -15,6 +15,9 @@ public class Agendamento
     public Medico Medico { get; set; }
     public Paciente Paciente { get; set; }
 
-    
+    public decimal ValorConsulta { get; set; }
+
+
+
 
 }

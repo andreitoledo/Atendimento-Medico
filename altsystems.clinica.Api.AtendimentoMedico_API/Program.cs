@@ -6,8 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
 using System.Text;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// CONFIGURAÇÃO OBRIGATÓRIA DO QUESTPDF
+QuestPDF.Settings.License = LicenseType.Community;
 
 // Adiciona o serviço de CORS para permitir requisições de qualquer origem (desenvolvimento)
 builder.Services.AddCors(options =>
@@ -62,7 +66,7 @@ builder.Services.AddScoped<ITriagemRepository, TriagemRepository>();
 builder.Services.AddScoped<IRecepcaoRepository, RecepcaoRepository>();
 
 builder.Services.AddScoped<IConsultaRepository, ConsultaRepository>();
-
+builder.Services.AddScoped<ReciboPdfService>();
 
 
 
