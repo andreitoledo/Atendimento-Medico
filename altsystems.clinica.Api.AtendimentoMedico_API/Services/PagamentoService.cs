@@ -77,6 +77,33 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Services
                 Valor = faturamento.Valor
             };
         }
+
+        public async Task<ConciliacaoResultadoDTO> ConciliarFaturamentoAsync(int faturamentoId)
+        {
+            var faturamento = await _context.Faturamentos
+                .FirstOrDefaultAsync(f => f.Id == faturamentoId && f.StatusPagamento == "Aguardando");
+
+            if (faturamento == null)
+            {
+                return new ConciliacaoResultadoDTO
+                {
+                    Sucesso = false,
+                    Mensagem = "Faturamento não encontrado ou já pago."
+                };
+            }
+
+            faturamento.StatusPagamento = "Pago";
+            await _context.SaveChangesAsync();
+
+            return new ConciliacaoResultadoDTO
+            {
+                Sucesso = true,
+                Mensagem = "Pagamento conciliado com sucesso.",
+                FaturamentoId = faturamento.Id,
+                Valor = faturamento.Valor
+            };
+        }
+
     }
 
     public class ConciliacaoResultadoDTO

@@ -31,6 +31,18 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost("conciliar/faturamento/{faturamentoId}")]
+        public async Task<IActionResult> ConciliarFaturamento(int faturamentoId)
+        {
+            var result = await _pagamentoService.ConciliarFaturamentoAsync(faturamentoId);
+            if (!result.Sucesso)
+                return NotFound(result);
+
+            return Ok(result);
+        }
+
+
     }
 
 }
