@@ -26,6 +26,8 @@ import ProntuarioPsiquiatraPage from './pages/ProntuarioPsiquiatraPage';
 import PagamentoForm from './pages/PagamentoForm';
 import DashboardFinanceiroConciliacaoPage from './pages/DashboardFinanceiroConciliacaoPage';
 import HistoricoEdicoesPage from './pages/HistoricoEdicoesPage';
+import TriagensListagemPage from './pages/TriagensListagemPage';
+import TriagemEditarPage from './pages/TriagemEditarPage';
 
 
 function App() {
@@ -62,6 +64,8 @@ function App() {
             <Route path="/pagamentoForm" element={<PagamentoForm />} />            
             <Route path="/dashboardFinanceiroConciliacaoPage" element={<DashboardFinanceiroConciliacaoPage />} />            
             <Route path="/historico-edicoes/:pacienteId" element={<HistoricoEdicoesPage />} />
+            <Route path="/triagens" element={<TriagensListagemPage />} />
+            <Route path="/triagem/editar/:id" element={<TriagemEditarPage />} />
 
             
 

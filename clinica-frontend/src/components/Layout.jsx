@@ -24,7 +24,7 @@ const Layout = ({ children }) => {
         { label: 'Recepção', path: '/recepcao', roles: ['admin', 'medico'] },
         { label: 'Triagem', path: '/triagem', roles: ['admin', 'medico'] },
         { label: 'Agendamentos', path: '/agendamentos', roles: ['admin'] },
-        { label: 'Consultas Médicas', path: '/consultas', roles: ['admin'] },
+        { label: 'Consultas Médicas', path: '/consultas', roles: ['admin', 'medico'] },
       ]
     },
     {
@@ -42,7 +42,7 @@ const Layout = ({ children }) => {
       items: [
         { label: 'Faturamentos', path: '/relatoriosFaturamentos', roles: ['admin'] },
         { label: 'Dashboard Financeiros', path: '/dashboardFinanceiro', roles: ['admin'] },
-        { label: 'Consulta Médica', path: '/relatorioConsultaMedica', roles: ['admin'] },
+        { label: 'Consulta Médica', path: '/relatorioConsultaMedica', roles: ['admin', 'medico'] },
         { label: 'Comparecimento', path: '/relatorioComparecimento', roles: ['admin'] },
         { label: 'Agendamento por Período', path: '/relatorioAgendamentosPorPeriodo', roles: ['admin'] },
         { label: 'Paciente Recorrente', path: '/relatorioPacientesRecorrentes', roles: ['admin'] },
@@ -56,11 +56,10 @@ const Layout = ({ children }) => {
       items: [
         { label: 'Prontuario Clinico', path: '/prontuario-clinico/:id', roles: ['admin', 'medico'] },
         { label: 'Prontuario Psicologo', path: '/prontuario-psicologo/:id', roles: ['admin', 'medico'] },
-        { label: 'Prontuario Psiquiatra', path: '/prontuario-psiquiatra/:id', roles: ['admin'] },
+        { label: 'Prontuario Psiquiatra', path: '/prontuario-psiquiatra/:id', roles: ['admin', 'medico'] },
         { label: 'Pagamentos', path: '/pagamentoForm', roles: ['admin'] },        
-        { label: 'Dashboard Conciliação', path: '/dashboardFinanceiroConciliacaoPage', roles: ['admin'] },
-        // { label: 'Historico de Edições', path: '/historico-edicoes/:pacienteId', roles: ['admin'] },
-        // { label: 'Historico de Edições', path: `/historico-edicoes/${pacienteIdLogado || 1}`, roles: ['admin'] },
+        { label: 'Dashboard Conciliação', path: '/dashboardFinanceiroConciliacaoPage', roles: ['admin'] },        
+        { label: 'Listagem de Triagens', path: '/triagens', roles: ['admin', 'medico'] }        
 
       ]
     },
