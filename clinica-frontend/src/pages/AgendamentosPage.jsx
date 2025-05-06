@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import {
   Box, Typography, Paper, TextField, Button, Table, TableHead,
-  TableRow, TableCell, TableBody, IconButton, MenuItem, Select, 
+  TableRow, TableCell, TableBody, IconButton, MenuItem, Select,
   FormControl, InputLabel, Autocomplete
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -176,12 +176,15 @@ const AgendamentosPage = () => {
 
           <Autocomplete
             options={pacientes}
+            value={pacientes.find(p => p.id === pacienteId) || null} // 👈 define o valor atual
             getOptionLabel={(option) => `${option.nome} - ${option.email}`}
             onChange={(event, newValue) => setPacienteId(newValue?.id || "")}
             renderInput={(params) => <TextField {...params} label="Selecione o paciente" fullWidth />}
             isOptionEqualToValue={(option, value) => option.id === value.id}
-            sx={{ mb: 2 }} // espaçamento
+            sx={{ mb: 2 }}
           />
+
+
 
           <TextField
             label="Data da Consulta"
