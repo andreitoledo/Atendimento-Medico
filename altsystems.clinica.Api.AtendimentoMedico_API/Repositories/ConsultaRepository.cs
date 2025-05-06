@@ -91,17 +91,21 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
 
         public async Task<ReciboDTO?> ObterReciboPorConsultaIdAsync(int consultaId)
         {
-            var dto = await _context.Consultas
-                .Where(c => c.Id == consultaId)
-                .Select(c => new ReciboDTO
+            var dto = await (
+                from consulta in _context.Consultas
+                where consulta.Id == consultaId
+                join faturamento in _context.Faturamentos
+                    on consulta.AgendamentoId equals faturamento.AgendamentoId into fatGroup
+                from fat in fatGroup.DefaultIfEmpty() // LEFT JOIN
+                select new ReciboDTO
                 {
-                    NomePaciente = c.Agendamento.Paciente.Usuario.Nome,
-                    NomeMedico = c.Agendamento.Medico.Usuario.Nome,
-                    DataConsulta = c.DataConsulta,
-                    Valor = c.Agendamento.ValorConsulta,
-                    Observacoes = c.Diagnostico
-                })
-                .FirstOrDefaultAsync();
+                    NomePaciente = consulta.Agendamento.Paciente.Usuario.Nome,
+                    NomeMedico = consulta.Agendamento.Medico.Usuario.Nome,
+                    DataConsulta = consulta.DataConsulta,
+                    Valor = fat != null ? fat.Valor : 0,
+                    Observacoes = consulta.Diagnostico
+                }
+            ).FirstOrDefaultAsync();
 
             return dto;
         }
