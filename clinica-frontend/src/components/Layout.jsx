@@ -50,7 +50,16 @@ const Layout = ({ children }) => {
         { label: 'Consulta por Especialidade', path: '/relatorioConsultasPorEspecialidades', roles: ['admin'] },
         { label: 'Consulta Por Dia', path: '/relatorioConsultasPorDia', roles: ['admin'] },
       ]
-    }
+    },
+    {
+      title: '📋 Outros',
+      items: [
+        { label: 'Prontuario Clinico', path: '/prontuario-clinico/:id', roles: ['admin', 'medico'] },
+        { label: 'Prontuario Psicologo', path: '/prontuario-psicologo/:id', roles: ['admin', 'medico'] },
+        { label: 'Prontuario Psiquiatra', path: '/prontuario-psiquiatra/:id', roles: ['admin'] },
+        { label: 'Pagamentos', path: '/pagamentoForm', roles: ['admin'] },
+      ]
+    },
   ];
 
   const handleLogout = () => {
