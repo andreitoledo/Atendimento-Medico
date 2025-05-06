@@ -64,14 +64,12 @@ builder.Services.AddScoped<IMedicoEspecialidadeRepository, MedicoEspecialidadeRe
 builder.Services.AddScoped<IFaturamentoRepository, FaturamentoRepository>();
 builder.Services.AddScoped<ITriagemRepository, TriagemRepository>();
 builder.Services.AddScoped<IRecepcaoRepository, RecepcaoRepository>();
-
 builder.Services.AddScoped<IConsultaRepository, ConsultaRepository>();
+
+// Serviços
 builder.Services.AddScoped<ReciboPdfService>();
 builder.Services.AddScoped<PagamentoService>();
-
-
-
-
+builder.Services.AddScoped<FinanceiroService>();
 
 
 // Banco de dados
