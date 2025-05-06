@@ -67,6 +67,8 @@ builder.Services.AddScoped<IRecepcaoRepository, RecepcaoRepository>();
 
 builder.Services.AddScoped<IConsultaRepository, ConsultaRepository>();
 builder.Services.AddScoped<ReciboPdfService>();
+builder.Services.AddScoped<PagamentoService>();
+
 
 
 
