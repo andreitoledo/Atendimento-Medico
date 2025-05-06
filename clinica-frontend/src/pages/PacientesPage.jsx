@@ -6,6 +6,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import { useNavigate } from "react-router-dom"; // <-- Adicionado
 
 const PacientesPage = () => {
   const [pacientes, setPacientes] = useState([]);
@@ -19,6 +20,7 @@ const PacientesPage = () => {
   const [editingId, setEditingId] = useState(null);
   const [usuarioId, setUsuarioId] = useState(null);
   const token = localStorage.getItem("token");
+  const navigate = useNavigate(); // <-- Adicionado
 
   const fetchPacientes = async () => {
     const res = await fetch("https://localhost:44327/api/Paciente", {
@@ -36,7 +38,6 @@ const PacientesPage = () => {
     if (!nome || !email || !cpf || !genero || !telefone || !endereco || !dataNascimento) return;
 
     if (editingId) {
-      // Atualizar paciente
       await fetch(`https://localhost:44327/api/Paciente/${editingId}`, {
         method: "PUT",
         headers: {
@@ -52,7 +53,6 @@ const PacientesPage = () => {
         }),
       });
 
-      // Atualizar usuário
       if (usuarioId) {
         await fetch(`https://localhost:44327/api/Usuario/${usuarioId}`, {
           method: "PUT",
@@ -69,7 +69,6 @@ const PacientesPage = () => {
       return;
     }
 
-    // Criação de usuário e paciente
     const usuarioRes = await fetch("https://localhost:44327/api/Usuario", {
       method: "POST",
       headers: {
@@ -209,13 +208,18 @@ const PacientesPage = () => {
                   <TableCell>{p.genero}</TableCell>
                   <TableCell>{p.telefone}</TableCell>
                   <TableCell>{p.endereco}</TableCell>
-                  <TableCell sx={{ display: "flex", gap: 1 }}>
-                    <IconButton onClick={() => handleEdit(p)}>
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton onClick={() => handleDelete(p.id)}>
-                      <DeleteIcon />
-                    </IconButton>
+                  <TableCell sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                    <Box>
+                      <IconButton onClick={() => handleEdit(p)}><EditIcon /></IconButton>
+                      <IconButton onClick={() => handleDelete(p.id)}><DeleteIcon /></IconButton>
+                    </Box>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={() => navigate(`/historico-edicoes/${p.id}`)}
+                    >
+                      Ver Histórico
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}

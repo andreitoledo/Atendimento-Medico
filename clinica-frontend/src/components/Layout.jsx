@@ -59,6 +59,9 @@ const Layout = ({ children }) => {
         { label: 'Prontuario Psiquiatra', path: '/prontuario-psiquiatra/:id', roles: ['admin'] },
         { label: 'Pagamentos', path: '/pagamentoForm', roles: ['admin'] },        
         { label: 'Dashboard Conciliação', path: '/dashboardFinanceiroConciliacaoPage', roles: ['admin'] },
+        // { label: 'Historico de Edições', path: '/historico-edicoes/:pacienteId', roles: ['admin'] },
+        // { label: 'Historico de Edições', path: `/historico-edicoes/${pacienteIdLogado || 1}`, roles: ['admin'] },
+
       ]
     },
   ];
