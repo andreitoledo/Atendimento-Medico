@@ -17,6 +17,8 @@ const ConsultasPage = () => {
     const [exames, setExames] = useState([{ nome: "", observacoes: "" }]);
     const [editingId, setEditingId] = useState(null);
     const token = localStorage.getItem("token");
+    const [filtro, setFiltro] = useState("");
+
 
     const fetchConsultas = async () => {
         const res = await fetch("https://localhost:44327/api/Consulta", {
@@ -94,6 +96,12 @@ const ConsultasPage = () => {
         setEditingId(null);
     };
 
+    const consultasFiltradas = consultas.filter(c => {
+        const paciente = c.agendamento?.paciente?.usuario?.nome?.toLowerCase() || "";
+        const medico = c.agendamento?.medico?.usuario?.nome?.toLowerCase() || "";
+        return paciente.includes(filtro.toLowerCase()) || medico.includes(filtro.toLowerCase());
+    });
+
     return (
         <Layout>
             <Box>
@@ -164,6 +172,15 @@ const ConsultasPage = () => {
                 </Paper>
 
                 <Paper>
+                    <TextField
+                        label="Buscar por paciente ou médico"
+                        variant="outlined"
+                        fullWidth
+                        sx={{ mb: 2 }}
+                        value={filtro}
+                        onChange={(e) => setFiltro(e.target.value)}
+                    />
+
                     <Table>
                         <TableHead>
                             <TableRow>
@@ -175,13 +192,10 @@ const ConsultasPage = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {consultas.map((c) => (
+                            {consultasFiltradas.map((c) => (
                                 <TableRow key={c.id}>
-
                                     <TableCell>{c.id}</TableCell>
                                     <TableCell>{c.agendamento?.paciente?.usuario?.nome} com {c.agendamento?.medico?.usuario?.nome}</TableCell>
-
-
                                     <TableCell>{new Date(c.dataConsulta).toLocaleString()}</TableCell>
                                     <TableCell>{c.diagnostico}</TableCell>
                                     <TableCell sx={{ display: "flex", gap: 1 }}>
@@ -191,6 +205,7 @@ const ConsultasPage = () => {
                                 </TableRow>
                             ))}
                         </TableBody>
+
                     </Table>
                 </Paper>
             </Box>
