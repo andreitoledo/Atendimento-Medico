@@ -184,11 +184,7 @@ const AgendamentosPage = () => {
             onChange={(e, newValue) => setMedicoId(newValue?.id || "")}
             renderInput={(params) => <TextField {...params} label="Médico" />}
             sx={{ mb: 2 }} />
-          {/* Plataforma a ser escolhido */}
-          {/* <TextField label="Plataforma" value={plataforma}
-            onChange={(e) => setPlataforma(e.target.value)} fullWidth sx={{ mb: 2 }} /> */}
-
-
+          {/* Plataforma a ser escolhido */}         
           <TextField select label="Plataforma" fullWidth value={plataforma} onChange={(e) => setPlataforma(e.target.value)} sx={{ mb: 2 }}>
             <MenuItem value="WhatsApp">WhatsApp</MenuItem>
             <MenuItem value="Google Meet">Google Meet</MenuItem>
@@ -196,10 +192,7 @@ const AgendamentosPage = () => {
             <MenuItem value="Skype">Skype</MenuItem>
             <MenuItem value="Teams">Teams</MenuItem>
             <MenuItem value="Outros">Outros</MenuItem>
-          </TextField>
-          
-
-
+          </TextField>        
           {/* Link do video a ser inserido */}
           <TextField label="Link Vídeo" value={linkVideo}
             onChange={(e) => setLinkVideo(e.target.value)} fullWidth sx={{ mb: 2 }} />
