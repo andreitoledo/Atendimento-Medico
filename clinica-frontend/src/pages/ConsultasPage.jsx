@@ -6,6 +6,8 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import { DataGrid } from '@mui/x-data-grid';
+
 
 const ConsultasPage = () => {
     const [consultas, setConsultas] = useState([]);
@@ -16,9 +18,9 @@ const ConsultasPage = () => {
     const [prescricoes, setPrescricoes] = useState([{ medicamento: "", posologia: "" }]);
     const [exames, setExames] = useState([{ nome: "", observacoes: "" }]);
     const [editingId, setEditingId] = useState(null);
-    const token = localStorage.getItem("token");
     const [filtro, setFiltro] = useState("");
-
+    const [pageSize, setPageSize] = useState(10);
+    const token = localStorage.getItem("token");
 
     const fetchConsultas = async () => {
         const res = await fetch("https://localhost:44327/api/Consulta", {
@@ -102,6 +104,33 @@ const ConsultasPage = () => {
         return paciente.includes(filtro.toLowerCase()) || medico.includes(filtro.toLowerCase());
     });
 
+    // Mapeia as consultas para o DataGrid
+    const consultasGrid = consultas.map(c => ({
+        id: c.id,
+        agendamento: `${c.agendamento?.paciente?.usuario?.nome || ""} com ${c.agendamento?.medico?.usuario?.nome || ""}`,
+        dataConsulta: new Date(c.dataConsulta).toLocaleString(),
+        diagnostico: c.diagnostico,
+        raw: c, // usado para edição/deleção
+    }));
+
+    const columns = [
+        { field: 'id', headerName: 'ID', width: 70 },
+        { field: 'agendamento', headerName: 'Agendamento', width: 300, flex: 1 },
+        { field: 'dataConsulta', headerName: 'Data', width: 200 },
+        { field: 'diagnostico', headerName: 'Diagnóstico', width: 300, flex: 1 },
+        {
+            field: 'acoes',
+            headerName: 'Ações',
+            width: 120,
+            renderCell: (params) => (
+                <Box display="flex" gap={1}>
+                    <IconButton onClick={() => handleEdit(params.row.raw)}><EditIcon /></IconButton>
+                    <IconButton onClick={() => handleDelete(params.row.id)}><DeleteIcon /></IconButton>
+                </Box>
+            )
+        }
+    ];
+
     return (
         <Layout>
             <Box>
@@ -181,32 +210,17 @@ const ConsultasPage = () => {
                         onChange={(e) => setFiltro(e.target.value)}
                     />
 
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell >ID</TableCell>
-                                <TableCell sx={{ width: '300px' }}>Agendamento</TableCell>
-                                <TableCell sx={{ width: '200px' }}>Data</TableCell>
-                                <TableCell>Diagnóstico</TableCell>
-                                <TableCell>Ações</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {consultasFiltradas.map((c) => (
-                                <TableRow key={c.id}>
-                                    <TableCell>{c.id}</TableCell>
-                                    <TableCell>{c.agendamento?.paciente?.usuario?.nome} com {c.agendamento?.medico?.usuario?.nome}</TableCell>
-                                    <TableCell>{new Date(c.dataConsulta).toLocaleString()}</TableCell>
-                                    <TableCell>{c.diagnostico}</TableCell>
-                                    <TableCell sx={{ display: "flex", gap: 1 }}>
-                                        <IconButton onClick={() => handleEdit(c)}><EditIcon /></IconButton>
-                                        <IconButton onClick={() => handleDelete(c.id)}><DeleteIcon /></IconButton>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-
-                    </Table>
+                    <DataGrid
+                        rows={consultasGrid.filter(c =>
+                            c.agendamento.toLowerCase().includes(filtro.toLowerCase())
+                        )}
+                        columns={columns}
+                        pageSize={pageSize}
+                        onPageSizeChange={(newSize) => setPageSize(newSize)}
+                        rowsPerPageOptions={[10, 25, 50]}
+                        pagination
+                        autoHeight
+                    />
                 </Paper>
             </Box>
         </Layout>
