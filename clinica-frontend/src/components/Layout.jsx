@@ -56,10 +56,10 @@ const Layout = ({ children }) => {
     },
     {
       title: '📋 Pagamentos',
-      items: [       
+      items: [
         { label: 'Pagamentos', path: '/pagamentoForm', roles: ['admin'] },
         { label: 'Dashboard Conciliação', path: '/dashboardFinanceiroConciliacaoPage', roles: ['admin'] },
-       
+
       ]
     },
     {
@@ -67,7 +67,7 @@ const Layout = ({ children }) => {
       items: [
         { label: 'Prontuario Clinico', path: '/prontuario-clinico/:id', roles: ['admin', 'medico'] },
         { label: 'Prontuario Psicologo', path: '/prontuario-psicologo/:id', roles: ['admin', 'medico'] },
-        { label: 'Prontuario Psiquiatra', path: '/prontuario-psiquiatra/:id', roles: ['admin', 'medico'] },       
+        { label: 'Prontuario Psiquiatra', path: '/prontuario-psiquiatra/:id', roles: ['admin', 'medico'] },
         { label: 'Listagem de Triagens', path: '/triagens', roles: ['admin', 'medico'] }
 
       ]
@@ -82,8 +82,9 @@ const Layout = ({ children }) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <AppBar position="fixed" sx={{ zIndex: 1300 }}>
-        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography variant="h6">Clínica Online</Typography>
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>          
+          <Typography variant="h10">Versão 1.0.00</Typography>
+          <Typography variant="h5">Clínica Médica de Atendimento Online</Typography>
           <Button color="inherit" onClick={handleLogout}>Sair</Button>
         </Toolbar>
       </AppBar>
@@ -119,12 +120,12 @@ const Layout = ({ children }) => {
         <Toolbar />
         {children}
       </Box> */}
-<Box component="main" sx={{ flexGrow: 1, ml: `${drawerWidth}px`, pr: 2, overflowX: 'auto' }}>
-  <Toolbar />
-  <Box sx={{ maxWidth: `calc(100vw - ${drawerWidth + 32}px)`, pl: 2 }}>
-    {children}
-  </Box>
-</Box>
+      <Box component="main" sx={{ flexGrow: 1, ml: `${drawerWidth}px`, pr: 2, overflowX: 'auto' }}>
+        <Toolbar />
+        <Box sx={{ maxWidth: `calc(100vw - ${drawerWidth + 32}px)`, pl: 2 }}>
+          {children}
+        </Box>
+      </Box>
 
 
     </Box>
