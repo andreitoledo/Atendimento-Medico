@@ -55,13 +55,19 @@ const Layout = ({ children }) => {
       ]
     },
     {
+      title: '📋 Pagamentos',
+      items: [       
+        { label: 'Pagamentos', path: '/pagamentoForm', roles: ['admin'] },
+        { label: 'Dashboard Conciliação', path: '/dashboardFinanceiroConciliacaoPage', roles: ['admin'] },
+       
+      ]
+    },
+    {
       title: '📋 Outros',
       items: [
         { label: 'Prontuario Clinico', path: '/prontuario-clinico/:id', roles: ['admin', 'medico'] },
         { label: 'Prontuario Psicologo', path: '/prontuario-psicologo/:id', roles: ['admin', 'medico'] },
-        { label: 'Prontuario Psiquiatra', path: '/prontuario-psiquiatra/:id', roles: ['admin', 'medico'] },
-        { label: 'Pagamentos', path: '/pagamentoForm', roles: ['admin'] },
-        { label: 'Dashboard Conciliação', path: '/dashboardFinanceiroConciliacaoPage', roles: ['admin'] },
+        { label: 'Prontuario Psiquiatra', path: '/prontuario-psiquiatra/:id', roles: ['admin', 'medico'] },       
         { label: 'Listagem de Triagens', path: '/triagens', roles: ['admin', 'medico'] }
 
       ]
