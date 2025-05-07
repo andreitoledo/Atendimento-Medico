@@ -25,8 +25,8 @@ const Layout = ({ children }) => {
         { label: 'Triagem', path: '/triagem', roles: ['admin', 'medico'] },
         { label: 'Agendamentos', path: '/agendamentos', roles: ['admin'] },
         { label: 'Consultas Médicas', path: '/consultas', roles: ['admin', 'medico'] },
-        { label: 'Agenda', path: '/agendaPage', roles: ['admin', 'medico'] }, 
-        { label: 'Salas', path: '/SalasPage', roles: ['admin', 'medico'] },        
+        { label: 'Agenda', path: '/agendaPage', roles: ['admin', 'medico'] },
+        { label: 'Salas', path: '/SalasPage', roles: ['admin', 'medico'] },
 
       ]
     },
@@ -60,9 +60,9 @@ const Layout = ({ children }) => {
         { label: 'Prontuario Clinico', path: '/prontuario-clinico/:id', roles: ['admin', 'medico'] },
         { label: 'Prontuario Psicologo', path: '/prontuario-psicologo/:id', roles: ['admin', 'medico'] },
         { label: 'Prontuario Psiquiatra', path: '/prontuario-psiquiatra/:id', roles: ['admin', 'medico'] },
-        { label: 'Pagamentos', path: '/pagamentoForm', roles: ['admin'] },        
-        { label: 'Dashboard Conciliação', path: '/dashboardFinanceiroConciliacaoPage', roles: ['admin'] },        
-        { label: 'Listagem de Triagens', path: '/triagens', roles: ['admin', 'medico'] }        
+        { label: 'Pagamentos', path: '/pagamentoForm', roles: ['admin'] },
+        { label: 'Dashboard Conciliação', path: '/dashboardFinanceiroConciliacaoPage', roles: ['admin'] },
+        { label: 'Listagem de Triagens', path: '/triagens', roles: ['admin', 'medico'] }
 
       ]
     },
@@ -109,10 +109,18 @@ const Layout = ({ children }) => {
         </List>
       </Drawer>
 
-      <Box component="main" sx={{ flexGrow: 1, p: 3, ml: `${drawerWidth}px` }}>
+      {/* <Box component="main" sx={{ flexGrow: 1, p: 3, ml: `${drawerWidth}px` }}>
         <Toolbar />
         {children}
-      </Box>
+      </Box> */}
+<Box component="main" sx={{ flexGrow: 1, ml: `${drawerWidth}px`, pr: 2, overflowX: 'auto' }}>
+  <Toolbar />
+  <Box sx={{ maxWidth: `calc(100vw - ${drawerWidth + 32}px)`, pl: 2 }}>
+    {children}
+  </Box>
+</Box>
+
+
     </Box>
   );
 };

@@ -81,24 +81,31 @@ export default function DashboardFinanceiroConciliacaoPage() {
       field: "valor",
       headerName: "Valor (R$)",
       width: 120,
-      valueFormatter: (params) => {
-        const v = Number(params.value || 0);
-        return `R$ ${v.toFixed(2)}`;
-      }
+      renderCell: (params) => `R$ ${parseFloat(params.row.valor).toFixed(2)}`
     },
     { field: "formaPagamento", headerName: "Forma", width: 120 },
     { field: "statusPagamento", headerName: "Status", width: 130 },
+
     {
       field: "acoes",
       headerName: "Ações",
-      renderCell: (p) => (
-        p.row.formaPagamento === "Pix" && p.row.statusPagamento === "Aguardando"
-          ? <Button size="small" onClick={() => conciliar(p.row.id)}>Conciliar Pix</Button>
-          : null
-      ),
-      width: 150
+      width: 150,
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => {
+        const isPix = params.row.formaPagamento === "Pix";
+        const isAguardando = params.row.statusPagamento === "Aguardando";
+
+        return isPix && isAguardando ? (
+          <Button size="small" onClick={() => conciliar(params.row.id)}>
+            Conciliar Pix
+          </Button>
+        ) : null;
+      }
     }
+
   ];
+
 
   return (
     <Layout>
