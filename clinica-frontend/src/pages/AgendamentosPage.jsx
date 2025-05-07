@@ -26,7 +26,7 @@ const AgendamentosPage = () => {
   const [status, setStatus] = useState("agendado");
   const [editingId, setEditingId] = useState(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
-
+  const [filtro, setFiltro] = useState("");
   const token = localStorage.getItem("token");
 
   const fetchAgendamentos = async () => {
@@ -184,7 +184,7 @@ const AgendamentosPage = () => {
             onChange={(e, newValue) => setMedicoId(newValue?.id || "")}
             renderInput={(params) => <TextField {...params} label="Médico" />}
             sx={{ mb: 2 }} />
-          {/* Plataforma a ser escolhido */}         
+          {/* Plataforma a ser escolhido */}
           <TextField select label="Plataforma" fullWidth value={plataforma} onChange={(e) => setPlataforma(e.target.value)} sx={{ mb: 2 }}>
             <MenuItem value="WhatsApp">WhatsApp</MenuItem>
             <MenuItem value="Google Meet">Google Meet</MenuItem>
@@ -192,7 +192,7 @@ const AgendamentosPage = () => {
             <MenuItem value="Skype">Skype</MenuItem>
             <MenuItem value="Teams">Teams</MenuItem>
             <MenuItem value="Outros">Outros</MenuItem>
-          </TextField>        
+          </TextField>
           {/* Link do video a ser inserido */}
           <TextField label="Link Vídeo" value={linkVideo}
             onChange={(e) => setLinkVideo(e.target.value)} fullWidth sx={{ mb: 2 }} />
@@ -210,8 +210,20 @@ const AgendamentosPage = () => {
         </Paper>
 
         <Paper sx={{ height: 500, width: '100%' }}>
+          <TextField
+            label="Buscar por paciente ou médico"
+            variant="outlined"
+            fullWidth
+            sx={{ mb: 2 }}
+            value={filtro}
+            onChange={(e) => setFiltro(e.target.value)}
+          />
+
           <DataGrid
-            rows={filtered}
+            rows={filtered.filter(a =>
+              (a.nomePaciente?.toLowerCase() || "").includes(filtro.toLowerCase()) ||
+              (a.nomeMedico?.toLowerCase() || "").includes(filtro.toLowerCase())
+            )}
             columns={columns}
             pageSize={10}
             rowsPerPageOptions={[10, 25, 50]}
