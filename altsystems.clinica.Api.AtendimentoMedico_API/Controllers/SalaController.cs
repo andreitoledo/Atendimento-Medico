@@ -43,5 +43,19 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
             return NoContent();
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var sala = await _context.Salas.FindAsync(id);
+            if (sala == null)
+                return NotFound();
+
+            _context.Salas.Remove(sala);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+
     }
 }
