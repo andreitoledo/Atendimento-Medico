@@ -21,5 +21,19 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
             var result = await _financeiroService.ListarFaturamentosAsync(filtro);
             return Ok(result);
         }
+
+        [HttpGet("teste")]
+        public async Task<IActionResult> TesteFaturamentos()
+        {
+            var filtro = new FiltroFinanceiroDTO
+            {
+                DataInicio = DateTime.Today.AddDays(-7),
+                DataFim = DateTime.Today
+            };
+
+            var result = await _financeiroService.ListarFaturamentosAsync(filtro);
+            return Ok(result);
+        }
+
     }
 }
