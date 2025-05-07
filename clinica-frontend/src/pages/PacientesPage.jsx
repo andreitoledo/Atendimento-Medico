@@ -25,6 +25,7 @@ const PacientesPage = () => {
   const [pageSize, setPageSize] = useState(10);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+  const [filtro, setFiltro] = useState("");
 
   const fetchPacientes = async () => {
     const res = await fetch("https://localhost:44327/api/Paciente", {
@@ -77,7 +78,7 @@ const PacientesPage = () => {
     if (!usuarioRes.ok) {
 
       const erro = await usuarioRes.text(); // <-- pegue o erro do backend
-  console.error("Erro ao criar usuário:", erro); // <-- log completo
+      console.error("Erro ao criar usuário:", erro); // <-- log completo
 
 
       setSnackbar({ open: true, message: "Erro ao criar usuário", severity: "error" });
@@ -151,12 +152,27 @@ const PacientesPage = () => {
     }
   ];
 
+  const pacientesFiltrados = pacientes.filter(p =>
+    p.nome.toLowerCase().includes(filtro.toLowerCase()) ||
+    p.email.toLowerCase().includes(filtro.toLowerCase())
+  );
+
+
   return (
     <Layout>
       <Box>
         <Typography variant="h5" gutterBottom>Pacientes</Typography>
 
         <Paper sx={{ p: 2, mb: 3 }}>
+          <TextField
+            label="Buscar por nome/email"
+            variant="outlined"
+            fullWidth
+            sx={{ mb: 2 }}
+            value={filtro}
+            onChange={(e) => setFiltro(e.target.value)}
+          />
+
           <TextField label="Nome" value={nome} onChange={(e) => setNome(e.target.value)} fullWidth sx={{ mb: 2 }} />
           <TextField label="Email" value={email} onChange={(e) => setEmail(e.target.value)} fullWidth sx={{ mb: 2 }} />
           <TextField label="CPF" value={cpf} onChange={(e) => setCpf(e.target.value)} fullWidth sx={{ mb: 2 }} />
@@ -177,12 +193,24 @@ const PacientesPage = () => {
         </Paper>
 
         <Paper sx={{ height: 500, width: '100%' }}>
+          <TextField
+            label="Buscar por nome/email"
+            variant="outlined"
+            fullWidth
+            sx={{ mb: 2 }}
+            value={filtro}
+            onChange={(e) => setFiltro(e.target.value)}
+          />
+
           <DataGrid
-            rows={pacientes} columns={columns}
-            pageSize={pageSize} onPageSizeChange={(newSize) => setPageSize(newSize)}
+            rows={pacientesFiltrados}
+            columns={columns}
+            pageSize={pageSize}
+            onPageSizeChange={(newSize) => setPageSize(newSize)}
             rowsPerPageOptions={[10, 25, 50]}
             pagination
           />
+
         </Paper>
 
         <Snackbar open={snackbar.open} autoHideDuration={3000} onClose={() => setSnackbar({ ...snackbar, open: false })}>
