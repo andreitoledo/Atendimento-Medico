@@ -143,7 +143,8 @@ const SalasPage = () => {
       <Box>
         <Typography variant="h5" gutterBottom>Gerenciamento de Salas</Typography>
 
-        <Paper sx={{ p: 2, mb: 3 }}>
+        <Paper sx={{ p: 2, width: "100%", overflowX: "auto" }}>
+
           <TextField
             label="Nome"
             value={nome}

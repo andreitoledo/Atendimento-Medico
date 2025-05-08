@@ -133,6 +133,9 @@ const Layout = ({ children }) => {
             overflowX: "hidden",
             transition: "width 0.3s",
             boxSizing: "border-box",
+            position: "fixed",  // <-- adiciona isso
+            height: "100vh",
+            zIndex: 1200
           },
         }}
       >
@@ -168,10 +171,29 @@ const Layout = ({ children }) => {
         </List>
       </Drawer>
 
-      <Box component="main" sx={{ flexGrow: 1, ml: `${open ? drawerWidth : 64}px`, p: 3 }}>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          paddingLeft: open ? `${drawerWidth}px` : "64px",
+          paddingTop: 3,
+          paddingRight: 3,
+          paddingBottom: 3,
+          paddingLeft: 3,
+          transition: "all 0.3s ease",
+          minHeight: "100vh",
+          backgroundColor: (theme) => theme.palette.background.default,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <Toolbar />
-        {children}
+        <Box sx={{ flexGrow: 1, width: "100%" }}>
+          {children}
+        </Box>
       </Box>
+
+
     </Box>
   );
 };
