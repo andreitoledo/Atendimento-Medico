@@ -125,6 +125,29 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<ReceitaDTO?> ObterReceitaPorConsultaIdAsync(int consultaId)
+        {
+            var consulta = await _context.Consultas
+                .Include(c => c.Agendamento)
+                    .ThenInclude(a => a.Paciente).ThenInclude(p => p.Usuario)
+                .Include(c => c.Agendamento)
+                    .ThenInclude(a => a.Medico).ThenInclude(m => m.Usuario)
+                .Include(c => c.Prescricoes)
+                .FirstOrDefaultAsync(c => c.Id == consultaId);
+
+            if (consulta == null) return null;
+
+            return new ReceitaDTO
+            {
+                NomePaciente = consulta.Agendamento.Paciente.Usuario.Nome,
+                NomeMedico = consulta.Agendamento.Medico.Usuario.Nome,
+                DataConsulta = consulta.DataConsulta,
+                Medicamentos = consulta.Prescricoes.Select(p => $"{p.Medicamento} - {p.Posologia}").ToList(),
+                Orientacoes = consulta.Observacoes ?? ""
+            };
+        }
+
+
 
 
 

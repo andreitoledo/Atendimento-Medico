@@ -68,11 +68,13 @@ builder.Services.AddScoped<IRecepcaoRepository, RecepcaoRepository>();
 builder.Services.AddScoped<IConsultaRepository, ConsultaRepository>();
 builder.Services.AddScoped<IHistoricoEdicaoRepository, HistoricoEdicaoRepository>();
 
+
 // Serviços
 builder.Services.AddScoped<ReciboPdfService>();
 builder.Services.AddScoped<PagamentoService>();
 builder.Services.AddScoped<FinanceiroService>();
 builder.Services.AddClinicaServices();
+builder.Services.AddScoped<ReceitaPdfService>();
 
 
 

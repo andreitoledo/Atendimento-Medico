@@ -12,6 +12,8 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Models
 
         public List<Prescricao> Prescricoes { get; set; }
         public List<Exame> ExamesSolicitados { get; set; }
+        public string? Observacoes { get; set; }
+
     }
 
 }
