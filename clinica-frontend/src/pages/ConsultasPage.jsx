@@ -98,6 +98,21 @@ const ConsultasPage = () => {
         setEditingId(null);
     };
 
+    // Gerar Receita
+    const gerarReceita = (consultaId) => {
+        const url = `https://localhost:44327/api/Receita/${consultaId}/pdf`;
+        fetch(url, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then(res => res.blob())
+        .then(blob => {
+            const blobUrl = window.URL.createObjectURL(blob);
+            window.open(blobUrl, "_blank");
+        })
+        .catch(() => alert("Erro ao gerar receita"));
+    };
+    
+
     const consultasFiltradas = consultas.filter(c => {
         const paciente = c.agendamento?.paciente?.usuario?.nome?.toLowerCase() || "";
         const medico = c.agendamento?.medico?.usuario?.nome?.toLowerCase() || "";
@@ -111,8 +126,9 @@ const ConsultasPage = () => {
         dataConsulta: new Date(c.dataConsulta).toLocaleString(),
         diagnostico: c.diagnostico,
         raw: c, // usado para edição/deleção
-    }));
+    }));  
 
+    // com botão gerar receita
     const columns = [
         { field: 'id', headerName: 'ID', width: 70 },
         { field: 'agendamento', headerName: 'Agendamento', width: 300, flex: 1 },
@@ -121,16 +137,19 @@ const ConsultasPage = () => {
         {
             field: 'acoes',
             headerName: 'Ações',
-            width: 120,
+            width: 180,
             renderCell: (params) => (
                 <Box display="flex" gap={1}>
                     <IconButton onClick={() => handleEdit(params.row.raw)}><EditIcon /></IconButton>
                     <IconButton onClick={() => handleDelete(params.row.id)}><DeleteIcon /></IconButton>
+                    <Button size="small" variant="outlined" onClick={() => gerarReceita(params.row.id)}>
+                        Receita
+                    </Button>
                 </Box>
             )
         }
     ];
-
+    
     return (
         <Layout>
             <Box>
@@ -198,6 +217,7 @@ const ConsultasPage = () => {
                     <Button variant="contained" onClick={handleAdd} sx={{ mt: 2 }}>
                         {editingId ? "Atualizar Consulta" : "Salvar Consulta"}
                     </Button>
+                    {editingId && <Button onClick={resetForm}>Cancelar</Button>}
                 </Paper>
 
                 <Paper>

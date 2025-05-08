@@ -169,6 +169,7 @@ const SalasPage = () => {
           <Button variant="contained" onClick={handleAddOrUpdate}>
             {editingId ? 'Atualizar' : 'Adicionar'}
           </Button>
+          {editingId && <Button onClick={resetForm}>Cancelar</Button>}
         </Paper>
 
         <Paper sx={{ p: 2 }}>
