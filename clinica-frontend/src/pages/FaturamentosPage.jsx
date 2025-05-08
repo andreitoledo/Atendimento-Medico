@@ -7,6 +7,8 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { DataGrid } from "@mui/x-data-grid";
+
 
 const FaturamentosPage = () => {
   const [faturamentos, setFaturamentos] = useState([]);
@@ -18,6 +20,8 @@ const FaturamentosPage = () => {
   const [statusPagamento, setStatusPagamento] = useState("");
   const [codigoTransacao, setCodigoTransacao] = useState("");
   const [editingId, setEditingId] = useState(null);
+  const [filtro, setFiltro] = useState("");
+  const [pageSize, setPageSize] = useState(10);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -111,6 +115,41 @@ const FaturamentosPage = () => {
     if (res.ok) fetchFaturamentos();
   };
 
+  const faturamentosFiltrados = faturamentos
+    .filter(f =>
+      (f.pacienteNome?.toLowerCase() || "").includes(filtro.toLowerCase()) ||
+      (f.medicoNome?.toLowerCase() || "").includes(filtro.toLowerCase())
+    )
+    .map(f => ({
+      id: f.id,
+      paciente: f.pacienteNome,
+      medico: f.medicoNome,
+      data: new Date(f.data).toLocaleString(),
+      valor: f.valor.toFixed(2),
+      formaPagamento: f.formaPagamento,
+      raw: f
+    }));
+
+  const columns = [
+    { field: "id", headerName: "ID", width: 70 },
+    { field: "paciente", headerName: "Paciente", flex: 1 },
+    { field: "medico", headerName: "Médico", flex: 1 },
+    { field: "data", headerName: "Data", width: 180 },
+    { field: "valor", headerName: "Valor (R$)", width: 130 },
+    { field: "formaPagamento", headerName: "Forma", width: 140 },
+    {
+      field: "acoes",
+      headerName: "Ações",
+      width: 120,
+      renderCell: (params) => (
+        <Box display="flex" gap={1}>
+          <IconButton onClick={() => handleEdit(params.row.raw)}><EditIcon /></IconButton>
+          <IconButton onClick={() => handleDelete(params.row.id)}><DeleteIcon /></IconButton>
+        </Box>
+      )
+    }
+  ];
+
   return (
     <Layout>
       <Box>
@@ -186,35 +225,25 @@ const FaturamentosPage = () => {
         </Paper>
 
         <Paper>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Paciente</TableCell>
-                <TableCell>Médico</TableCell>
-                <TableCell>Data</TableCell>
-                <TableCell>Valor (R$)</TableCell>
-                <TableCell>Forma</TableCell>
-                <TableCell>Ações</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {faturamentos.map((f) => (
-                <TableRow key={f.id}>
-                  <TableCell>{f.id}</TableCell>
-                  <TableCell>{f.pacienteNome}</TableCell>
-                  <TableCell>{f.medicoNome}</TableCell>
-                  <TableCell>{new Date(f.data).toLocaleString()}</TableCell>
-                  <TableCell>{f.valor}</TableCell>
-                  <TableCell>{f.formaPagamento}</TableCell>
-                  <TableCell sx={{ display: "flex", gap: 1 }}>
-                    <IconButton onClick={() => handleEdit(f)}><EditIcon /></IconButton>
-                    <IconButton onClick={() => handleDelete(f.id)}><DeleteIcon /></IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <Paper sx={{ p: 2, mt: 3 }}>
+            <TextField
+              label="Buscar por paciente ou médico"
+              variant="outlined"
+              fullWidth
+              sx={{ mb: 2 }}
+              value={filtro}
+              onChange={(e) => setFiltro(e.target.value)}
+            />
+            <DataGrid
+              rows={faturamentosFiltrados}
+              columns={columns}
+              pageSize={pageSize}
+              onPageSizeChange={(newSize) => setPageSize(newSize)}
+              rowsPerPageOptions={[10, 25, 50]}
+              pagination
+              autoHeight
+            />
+          </Paper>
         </Paper>
       </Box>
     </Layout>
