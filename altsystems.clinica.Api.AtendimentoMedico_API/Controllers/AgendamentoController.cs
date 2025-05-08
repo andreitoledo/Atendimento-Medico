@@ -112,6 +112,14 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
             return NoContent();
         }
 
+        [HttpGet("nao-atendidos")]
+        public async Task<IActionResult> ObterNaoAtendidos()
+        {
+            var agendamentos = await _repository.ObterNaoAtendidosAsync();
+            return Ok(agendamentos);
+        }
+
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAgendamento(int id)

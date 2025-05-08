@@ -73,5 +73,15 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
             return true;
         }
 
+        public async Task<IEnumerable<Agendamento>> ObterNaoAtendidosAsync()
+        {
+            return await _context.Agendamentos
+                .Include(a => a.Paciente).ThenInclude(p => p.Usuario)
+                .Include(a => a.Medico).ThenInclude(m => m.Usuario)
+                .Where(a => !a.Atendido)
+                .ToListAsync();
+        }
+
+
     }
 }

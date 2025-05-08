@@ -67,6 +67,15 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
         {
             _context.Consultas.Update(consulta);
             await _context.SaveChangesAsync();
+
+            // flag que controle atendimento=true/false
+            var agendamento = await _context.Agendamentos.FindAsync(consulta.AgendamentoId);
+            if (agendamento != null)
+            {
+                agendamento.Atendido = true;
+                await _context.SaveChangesAsync();
+            }
+
         }
 
         public async Task<bool> Deletar(int id)

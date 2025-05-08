@@ -10,6 +10,8 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
         Task<Agendamento> Atualizar(Agendamento agendamento);
         Task<bool> Deletar(int id);
         Task<bool> MarcarCheckIn(int id);
+        Task<IEnumerable<Agendamento>> ObterNaoAtendidosAsync();
+
 
     }
 }

@@ -17,6 +17,9 @@ public class Agendamento
 
     public decimal ValorConsulta { get; set; }
 
+    public bool Atendido { get; set; } = false;
+
+
 
 
 
