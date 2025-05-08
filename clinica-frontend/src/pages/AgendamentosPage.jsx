@@ -126,9 +126,10 @@ const AgendamentosPage = () => {
 
   // Grid consuta
   const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'nomeMedico', headerName: 'Médico', width: 150 },
-    { field: 'nomePaciente', headerName: 'Paciente', width: 150 },
+    { field: 'id', headerName: 'ID Agendamento', width: 70 },
+    { field: 'nomeMedico', headerName: 'Médico', width: 180 },
+    { field: 'pacienteId', headerName: 'ID Paciente', width: 70 },
+    { field: 'nomePaciente', headerName: 'Paciente', width: 180 },
     {
       field: 'dataConsulta',
       headerName: 'Data',
