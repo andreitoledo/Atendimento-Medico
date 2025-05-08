@@ -10,5 +10,7 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
         Task<Faturamento> Criar(Faturamento faturamento);
         Task<Faturamento> Atualizar(Faturamento faturamento);
         Task<bool> Deletar(int id);
+        Task<IEnumerable<Agendamento>> ObterAgendamentosNaoPagosAsync();
+
     }
 }

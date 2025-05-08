@@ -73,6 +73,22 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
             return true;
         }
 
+        public async Task<IEnumerable<Agendamento>> ObterNaoPagosAsync()
+        {
+            // IDs de agendamentos que já estão faturados e pagos
+            var agendamentosPagos = await _context.Faturamentos
+                .Where(f => f.StatusPagamento == "Pago")
+                .Select(f => f.AgendamentoId)
+                .ToListAsync();
+
+            // Retorna os agendamentos com check-in, que não foram pagos ainda
+            return await _context.Agendamentos
+                .Include(a => a.Paciente).ThenInclude(p => p.Usuario)
+                .Include(a => a.Medico).ThenInclude(m => m.Usuario)
+                .Where(a => a.CheckIn && !agendamentosPagos.Contains(a.Id))
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Agendamento>> ObterNaoAtendidosAsync()
         {
             return await _context.Agendamentos

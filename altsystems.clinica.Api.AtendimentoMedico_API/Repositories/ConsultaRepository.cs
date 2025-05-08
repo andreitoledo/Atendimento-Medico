@@ -59,9 +59,19 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
             };
 
             _context.Consultas.Add(consulta);
-            await _context.SaveChangesAsync();
+
+            // Marca o agendamento como atendido ANTES do SaveChanges
+            var agendamento = await _context.Agendamentos.FindAsync(dto.AgendamentoId);
+            if (agendamento != null)
+            {
+                agendamento.Atendido = true;
+            }
+
+            await _context.SaveChangesAsync(); // Tudo salvo de uma vez
+
             return consulta;
         }
+
 
         public async Task Atualizar(Consulta consulta)
         {

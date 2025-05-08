@@ -11,6 +11,7 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
         Task<bool> Deletar(int id);
         Task<bool> MarcarCheckIn(int id);
         Task<IEnumerable<Agendamento>> ObterNaoAtendidosAsync();
+        Task<IEnumerable<Agendamento>> ObterNaoPagosAsync(); 
 
 
     }

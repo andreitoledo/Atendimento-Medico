@@ -123,6 +123,22 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
             return NoContent();
         }
 
+        [HttpGet("nao-pagos")]
+        public async Task<ActionResult> GetAgendamentosNaoPagos()
+        {
+            var agendamentos = await _repository.ObterAgendamentosNaoPagosAsync();
+
+            return Ok(agendamentos.Select(a => new
+            {
+                a.Id,
+                a.DataConsulta,
+                a.CheckIn,
+                NomePaciente = a.Paciente.Usuario.Nome,
+                NomeMedico = a.Medico.Usuario.Nome
+            }));
+        }
+
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
