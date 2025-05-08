@@ -11,6 +11,7 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
         Task Atualizar(Consulta consulta);
         Task<bool> Deletar(int id);
         Task<ReciboDTO?> ObterReciboPorConsultaIdAsync(int consultaId);
+        Task<ReciboDTO?> ObterReciboPorFaturamentoIdAsync(int faturamentoId);
 
     }
 }

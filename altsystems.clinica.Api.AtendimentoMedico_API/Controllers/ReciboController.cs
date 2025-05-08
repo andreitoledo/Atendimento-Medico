@@ -17,14 +17,25 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
             _pdfService = pdfService;
         }
 
-        [HttpGet("{id}/pdf")]
-        public async Task<IActionResult> GerarRecibo(int id)
+        //[HttpGet("{id}/pdf")]
+        //public async Task<IActionResult> GerarRecibo(int id)
+        //{
+        //    var dto = await _consultaRepo.ObterReciboPorConsultaIdAsync(id);
+        //    if (dto == null) return NotFound();
+
+        //    var pdfBytes = _pdfService.GerarRecibo(dto);
+        //    return File(pdfBytes, "application/pdf", $"recibo_{id}.pdf");
+        //}
+
+        [HttpGet("faturamento/{id}/pdf")]
+        public async Task<IActionResult> GerarReciboPorFaturamento(int id)
         {
-            var dto = await _consultaRepo.ObterReciboPorConsultaIdAsync(id);
+            var dto = await _consultaRepo.ObterReciboPorFaturamentoIdAsync(id); // Novo método
             if (dto == null) return NotFound();
 
             var pdfBytes = _pdfService.GerarRecibo(dto);
             return File(pdfBytes, "application/pdf", $"recibo_{id}.pdf");
         }
+
     }
 }
