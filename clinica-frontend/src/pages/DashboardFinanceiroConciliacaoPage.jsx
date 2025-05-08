@@ -89,21 +89,52 @@ export default function DashboardFinanceiroConciliacaoPage() {
     {
       field: "acoes",
       headerName: "Ações",
-      width: 150,
+      width: 200,
       sortable: false,
       filterable: false,
       renderCell: (params) => {
         const isPix = params.row.formaPagamento === "Pix";
         const isAguardando = params.row.statusPagamento === "Aguardando";
 
-        return isPix && isAguardando ? (
-          <Button size="small" onClick={() => conciliar(params.row.id)}>
-            Conciliar Pix
-          </Button>
-        ) : null;
+        // Recibo de pagamento
+        const handleAbrirRecibo = async () => {
+          const url = `https://localhost:44327/api/Recibo/${params.row.id}/pdf`;
+          const response = await fetch(url);
+          const blob = await response.blob();
+          const blobUrl = URL.createObjectURL(blob);
+          window.open(blobUrl, '_blank');
+        };
+
+        const gerarRecibo = async (id) => {
+          const res = await fetch(`https://localhost:44327/api/Recibo/faturamento/${id}/pdf`, {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+          });
+        
+          if (res.ok) {
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+          } else {
+            alert("Erro ao gerar recibo");
+          }
+        };
+        
+
+
+        return (
+          <Box display="flex" gap={1}>
+            {isPix && isAguardando && (
+              <Button size="small" onClick={() => conciliar(params.row.id)}>
+                Conciliar Pix
+              </Button>
+            )}
+            <Button size="small" onClick={() => gerarRecibo(params.row.id)}>
+              Recibo
+            </Button>
+          </Box>
+        );
       }
     }
-
   ];
 
 

@@ -163,15 +163,7 @@ const PacientesPage = () => {
       <Box>
         <Typography variant="h5" gutterBottom>Pacientes</Typography>
 
-        <Paper sx={{ p: 2, mb: 3 }}>
-          <TextField
-            label="Buscar por nome/email"
-            variant="outlined"
-            fullWidth
-            sx={{ mb: 2 }}
-            value={filtro}
-            onChange={(e) => setFiltro(e.target.value)}
-          />
+        <Paper sx={{ p: 2, mb: 3 }}>         
 
           <TextField label="Nome" value={nome} onChange={(e) => setNome(e.target.value)} fullWidth sx={{ mb: 2 }} />
           <TextField label="Email" value={email} onChange={(e) => setEmail(e.target.value)} fullWidth sx={{ mb: 2 }} />
