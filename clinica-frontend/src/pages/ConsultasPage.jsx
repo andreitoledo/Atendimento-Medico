@@ -8,7 +8,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { DataGrid } from '@mui/x-data-grid';
 
-
+// Componente ConsultasPage
 const ConsultasPage = () => {
     const [consultas, setConsultas] = useState([]);
     const [agendamentos, setAgendamentos] = useState([]);
@@ -22,6 +22,7 @@ const ConsultasPage = () => {
     const [pageSize, setPageSize] = useState(10);
     const token = localStorage.getItem("token");
 
+    // Verifica se o token existe, caso contrário redireciona para login
     const fetchConsultas = async () => {
         const res = await fetch("https://localhost:44327/api/Consulta", {
             headers: { Authorization: `Bearer ${token}` },
@@ -30,19 +31,23 @@ const ConsultasPage = () => {
         setConsultas(data);
     };
 
+    // traz os agendamentos não atendidos
+    // para o select de agendamentos
     const fetchAgendamentos = async () => {
-        const res = await fetch("https://localhost:44327/api/Agendamento", {
-            headers: { Authorization: `Bearer ${token}` },
+        const res = await fetch("https://localhost:44327/api/Agendamento/nao-atendidos", {
+          headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
         setAgendamentos(data);
-    };
-
+      };      
+    
+// Carrega as consultas e agendamentos ao montar o componente
     useEffect(() => {
         fetchConsultas();
         fetchAgendamentos();
     }, []);
 
+// Atualiza as consultas ao adicionar/editar/deletar
     const handleAdd = async () => {
         if (!agendamentoId || !dataConsulta || !diagnostico) return;
 
@@ -71,7 +76,7 @@ const ConsultasPage = () => {
             fetchConsultas();
         }
     };
-
+// Atualiza o estado do formulário com os dados da consulta selecionada
     const handleEdit = (c) => {
         setEditingId(c.id);
         setAgendamentoId(c.agendamentoId);
@@ -81,6 +86,7 @@ const ConsultasPage = () => {
         setExames(c.examesSolicitados || [{ nome: "", observacoes: "" }]);
     };
 
+    // Deleta uma consulta
     const handleDelete = async (id) => {
         const res = await fetch(`https://localhost:44327/api/Consulta/${id}`, {
             method: "DELETE",
@@ -112,7 +118,7 @@ const ConsultasPage = () => {
         .catch(() => alert("Erro ao gerar receita"));
     };
     
-
+// Filtra as consultas com base no filtro de texto
     const consultasFiltradas = consultas.filter(c => {
         const paciente = c.agendamento?.paciente?.usuario?.nome?.toLowerCase() || "";
         const medico = c.agendamento?.medico?.usuario?.nome?.toLowerCase() || "";
@@ -150,6 +156,8 @@ const ConsultasPage = () => {
         }
     ];
     
+    // Renderiza o componente
+    // com o layout, formulário e tabela de consultas
     return (
         <Layout>
             <Box>
@@ -166,7 +174,7 @@ const ConsultasPage = () => {
                         <MenuItem value="" disabled>Selecione o agendamento</MenuItem>
                         {agendamentos.map(a => (
                             <MenuItem key={a.id} value={a.id}>
-                                {a.nomePaciente} com {a.nomeMedico} - {new Date(a.dataConsulta).toLocaleString()}
+                                {a.paciente?.usuario?.nome} com {a.medico?.usuario?.nome} - {new Date(a.dataConsulta).toLocaleString()}
                             </MenuItem>
                         ))}
                     </Select>
