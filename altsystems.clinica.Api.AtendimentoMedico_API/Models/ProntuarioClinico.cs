@@ -28,5 +28,6 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Models
         public string ObservacoesEncerramento { get; set; }
 
         public DateTime DataCriacao { get; set; }
+        //public DateTime CriadoEm { get; internal set; }
     }
 }

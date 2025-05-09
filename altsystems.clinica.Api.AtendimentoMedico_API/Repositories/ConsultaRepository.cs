@@ -39,6 +39,39 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
+        //public async Task<Consulta> Criar(ConsultaCreateDTO dto)
+        //{
+        //    var consulta = new Consulta
+        //    {
+        //        AgendamentoId = dto.AgendamentoId,
+        //        DataConsulta = DateTime.UtcNow,
+        //        Diagnostico = dto.Diagnostico,
+        //        Prescricoes = dto.Prescricoes?.Select(p => new Prescricao
+        //        {
+        //            Medicamento = p.Medicamento,
+        //            Posologia = p.Posologia
+        //        }).ToList(),
+        //        ExamesSolicitados = dto.ExamesSolicitados?.Select(e => new Exame
+        //        {
+        //            Nome = e.Nome,
+        //            Observacoes = e.Observacoes
+        //        }).ToList()
+        //    };
+
+        //    _context.Consultas.Add(consulta);
+
+        //    // Marca o agendamento como atendido ANTES do SaveChanges
+        //    var agendamento = await _context.Agendamentos.FindAsync(dto.AgendamentoId);
+        //    if (agendamento != null)
+        //    {
+        //        agendamento.Atendido = true;
+        //    }
+
+        //    await _context.SaveChangesAsync(); // Tudo salvo de uma vez
+
+        //    return consulta;
+        //}
+
         public async Task<Consulta> Criar(ConsultaCreateDTO dto)
         {
             var consulta = new Consulta
@@ -46,47 +79,73 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
                 AgendamentoId = dto.AgendamentoId,
                 DataConsulta = DateTime.UtcNow,
                 Diagnostico = dto.Diagnostico,
-                Prescricoes = dto.Prescricoes?.Select(p => new Prescricao
-                {
-                    Medicamento = p.Medicamento,
-                    Posologia = p.Posologia
-                }).ToList(),
-                ExamesSolicitados = dto.ExamesSolicitados?.Select(e => new Exame
-                {
-                    Nome = e.Nome,
-                    Observacoes = e.Observacoes
-                }).ToList()
+                Prescricoes = new List<Prescricao>(),
+                ExamesSolicitados = new List<Exame>()
             };
+
+            // Adiciona prescrições
+            if (dto.Prescricoes != null)
+            {
+                foreach (var p in dto.Prescricoes)
+                {
+                    consulta.Prescricoes.Add(new Prescricao
+                    {
+                        Medicamento = p.Medicamento,
+                        Posologia = p.Posologia
+                    });
+                }
+            }
+
+            // Adiciona exames
+            if (dto.ExamesSolicitados != null)
+            {
+                foreach (var e in dto.ExamesSolicitados)
+                {
+                    consulta.ExamesSolicitados.Add(new Exame
+                    {
+                        Nome = e.Nome,
+                        Observacoes = e.Observacoes
+                    });
+                }
+            }
 
             _context.Consultas.Add(consulta);
 
-            // Marca o agendamento como atendido ANTES do SaveChanges
-            var agendamento = await _context.Agendamentos.FindAsync(dto.AgendamentoId);
+            // Marca como atendido
+            var agendamento = await _context.Agendamentos
+                .Include(a => a.Medico)
+                .ThenInclude(m => m.MedicoEspecialidades)
+                .FirstOrDefaultAsync(a => a.Id == dto.AgendamentoId);
+
             if (agendamento != null)
             {
                 agendamento.Atendido = true;
             }
 
-            await _context.SaveChangesAsync(); // Tudo salvo de uma vez
+            await _context.SaveChangesAsync();
 
             return consulta;
         }
 
 
+
         public async Task Atualizar(Consulta consulta)
         {
+            // Atualiza a consulta
             _context.Consultas.Update(consulta);
-            await _context.SaveChangesAsync();
 
-            // flag que controle atendimento=true/false
+            // Marca o agendamento como atendido
             var agendamento = await _context.Agendamentos.FindAsync(consulta.AgendamentoId);
             if (agendamento != null)
             {
                 agendamento.Atendido = true;
-                await _context.SaveChangesAsync();
+                _context.Entry(agendamento).Property(a => a.Atendido).IsModified = true;
             }
 
+            // Persiste tudo de uma vez
+            await _context.SaveChangesAsync();
         }
+
 
         public async Task<bool> Deletar(int id)
         {

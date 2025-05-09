@@ -1,4 +1,5 @@
 using altsystems.clinica.Api.AtendimentoMedico_API.Data;
+using altsystems.clinica.Api.AtendimentoMedico_API.DTOs;
 using altsystems.clinica.Api.AtendimentoMedico_API.Models;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -97,6 +98,30 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
                 .Where(a => !a.Atendido)
                 .ToListAsync();
         }
+
+        public async Task<EspecialidadeDTO?> ObterEspecialidadePorAgendamentoAsync(int agendamentoId)
+        {
+            var agendamento = await _context.Agendamentos
+                .Include(a => a.Medico)
+                    .ThenInclude(m => m.MedicoEspecialidades)
+                        .ThenInclude(me => me.Especialidade)
+                .FirstOrDefaultAsync(a => a.Id == agendamentoId);
+
+            var especialidade = agendamento?.Medico?.MedicoEspecialidades
+                .Select(me => me.Especialidade)
+                .FirstOrDefault();
+
+            if (especialidade == null) return null;
+
+            return new EspecialidadeDTO
+            {
+                Id = especialidade.Id,
+                EspecialidadeId = especialidade.Id, // se ainda precisar desse campo duplicado
+                Titulo = especialidade.Titulo,
+                Descricao = especialidade.Descricao
+            };
+        }
+
 
 
     }

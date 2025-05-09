@@ -129,7 +129,15 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Controllers
             
         }
 
+        [HttpGet("{id}/especialidade")]
+        public async Task<IActionResult> GetEspecialidadePorAgendamento(int id)
+        {
+            var dto = await _repository.ObterEspecialidadePorAgendamentoAsync(id);
+            if (dto == null)
+                return NotFound("Especialidade não encontrada para este agendamento.");
 
+            return Ok(dto);
+        }
 
 
         [HttpDelete("{id}")]

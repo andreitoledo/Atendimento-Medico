@@ -1,3 +1,4 @@
+using altsystems.clinica.Api.AtendimentoMedico_API.DTOs;
 using altsystems.clinica.Api.AtendimentoMedico_API.Models;
 
 namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
@@ -11,7 +12,9 @@ namespace altsystems.clinica.Api.AtendimentoMedico_API.Repositories
         Task<bool> Deletar(int id);
         Task<bool> MarcarCheckIn(int id);
         Task<IEnumerable<Agendamento>> ObterNaoAtendidosAsync();
-        Task<IEnumerable<Agendamento>> ObterNaoPagosAsync(); 
+        Task<IEnumerable<Agendamento>> ObterNaoPagosAsync();
+        Task<EspecialidadeDTO?> ObterEspecialidadePorAgendamentoAsync(int agendamentoId);
+
 
 
     }
