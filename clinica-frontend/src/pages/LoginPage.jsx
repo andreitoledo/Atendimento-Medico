@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { Box, Button, TextField, Typography, Container, Alert } from '@mui/material';
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Container,
+  Alert,
+  Paper
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
@@ -27,30 +35,45 @@ const LoginPage = () => {
   };
 
   return (
-    <Container maxWidth="xs">
+    <Container maxWidth="sm">
       <Box sx={{ mt: 10, textAlign: 'center' }}>
-        <Typography variant="h5" gutterBottom>Login</Typography>
+        <Typography variant="h4" gutterBottom color="primary">
+          Clínica Médica de Atendimento Online
+        </Typography>
 
-        {erro && <Alert severity="error">{erro}</Alert>}
+        <Paper elevation={4} sx={{ p: 4, borderRadius: 2, mt: 4 }}>
+          <Typography variant="h5" gutterBottom>
+            Login
+          </Typography>
 
-        <TextField
-          fullWidth
-          label="Email"
-          margin="normal"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <TextField
-          fullWidth
-          label="Senha"
-          type="password"
-          margin="normal"
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
-        />
-        <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }} onClick={handleLogin}>
-          Entrar
-        </Button>
+          {erro && <Alert severity="error" sx={{ mb: 2 }}>{erro}</Alert>}
+
+          <TextField
+            fullWidth
+            label="Email"
+            margin="normal"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <TextField
+            fullWidth
+            label="Senha"
+            type="password"
+            margin="normal"
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
+          />
+
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 3 }}
+            onClick={handleLogin}
+          >
+            Entrar
+          </Button>
+        </Paper>
       </Box>
     </Container>
   );
