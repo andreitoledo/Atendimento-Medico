@@ -42,11 +42,12 @@ const Layout = ({ children }) => {
   };
 
   const sections = [
-    {
+    {      
       title: "📋 Atendimento",
       items: [
         { label: "Recepção", path: "/recepcao", icon: <PeopleIcon />, roles: ["admin", "medico"] },
         { label: "Triagem", path: "/triagem", icon: <MedicalServicesIcon />, roles: ["admin", "medico"] },
+        { label: "Pacientes", path: "/pacientes", icon: <PeopleIcon />, roles: ["admin"] },
         { label: "Agendamentos", path: "/agendamentos", icon: <EventIcon />, roles: ["admin"] },
         { label: "Consultas Médicas", path: "/consultas", icon: <LocalHospitalIcon />, roles: ["admin", "medico"] },
         { label: "Agenda", path: "/agendaPage", icon: <EventIcon />, roles: ["admin", "medico"] },
@@ -58,8 +59,7 @@ const Layout = ({ children }) => {
       items: [
         { label: "Faturamentos", path: "/faturamentos", icon: <AttachMoneyIcon />, roles: ["admin"] },
         { label: "Especialidades", path: "/especialidades", icon: <MedicalServicesIcon />, roles: ["admin"] },
-        { label: "Medicos", path: "/medicos", icon: <LocalHospitalIcon />, roles: ["admin"] },
-        { label: "Pacientes", path: "/pacientes", icon: <PeopleIcon />, roles: ["admin"] },
+        { label: "Medicos", path: "/medicos", icon: <LocalHospitalIcon />, roles: ["admin"] },       
         { label: "Usuarios", path: "/usuarios", icon: <PeopleIcon />, roles: ["admin"] },
       ],
     },

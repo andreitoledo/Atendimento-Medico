@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 import {
     Box, Typography, Paper, TextField, Button, Table, TableHead,
@@ -20,6 +21,8 @@ const ConsultasPage = () => {
     const [editingId, setEditingId] = useState(null);
     const [filtro, setFiltro] = useState("");
     const [pageSize, setPageSize] = useState(10);
+    const navigate = useNavigate();
+    const [agendamentoSelecionado, setAgendamentoSelecionado] = useState(null);   
     const token = localStorage.getItem("token");
 
     // Verifica se o token existe, caso contrário redireciona para login
@@ -35,22 +38,26 @@ const ConsultasPage = () => {
     // para o select de agendamentos
     const fetchAgendamentos = async () => {
         const res = await fetch("https://localhost:44327/api/Agendamento/nao-atendidos", {
-          headers: { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
         setAgendamentos(data);
-      };      
-    
-// Carrega as consultas e agendamentos ao montar o componente
+    };
+
+    // Carrega as consultas e agendamentos ao montar o componente
     useEffect(() => {
         fetchConsultas();
         fetchAgendamentos();
     }, []);
 
-// Atualiza as consultas ao adicionar/editar/deletar
-    const handleAdd = async () => {
-        if (!agendamentoId || !dataConsulta || !diagnostico) return;
+    // Atualiza as consultas ao adicionar/editar/deletar
+    const [isSaving, setIsSaving] = useState(false);
 
+    const handleAdd = async () => {
+        if (!agendamentoId || !dataConsulta || !diagnostico || isSaving) return;
+    
+        setIsSaving(true); // bloqueia
+    
         const payload = {
             agendamentoId: parseInt(agendamentoId),
             dataConsulta,
@@ -58,32 +65,72 @@ const ConsultasPage = () => {
             prescricoes,
             examesSolicitados: exames,
         };
-
+    
         const method = editingId ? "PUT" : "POST";
         const url = `https://localhost:44327/api/Consulta${editingId ? "/" + editingId : ""}`;
-
-        const res = await fetch(url, {
-            method,
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(payload),
-        });
-
-        if (res.ok) {
-            resetForm();
-            fetchConsultas();
+    
+        try {
+            const res = await fetch(url, {
+                method,
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(payload),
+            });
+    
+            if (res.ok) {
+                await fetchConsultas();  // aguarda atualização da lista
+                resetForm();
+            } else {
+                alert("Erro ao salvar consulta.");
+            }
+        } catch (error) {
+            console.error("Erro ao salvar consulta:", error);
+            alert("Erro ao salvar.");
+        } finally {
+            setIsSaving(false); // libera botão
         }
     };
-// Atualiza o estado do formulário com os dados da consulta selecionada
-    const handleEdit = (c) => {
+    
+    // Atualiza o estado do formulário com os dados da consulta selecionada
+    const handleEdit = async (c) => {
         setEditingId(c.id);
-        setAgendamentoId(c.agendamentoId);
-        setDataConsulta(c.dataConsulta?.substring(0, 16)); // para input type="datetime-local"
+        setDataConsulta(c.dataConsulta?.substring(0, 16));
         setDiagnostico(c.diagnostico);
         setPrescricoes(c.prescricoes || [{ medicamento: "", posologia: "" }]);
         setExames(c.examesSolicitados || [{ nome: "", observacoes: "" }]);
+
+        const agendamentoJaExiste = agendamentos.some(a => a.id === c.agendamentoId);
+
+        if (!agendamentoJaExiste) {
+            try {
+                const res = await fetch(`https://localhost:44327/api/Agendamento/${c.agendamentoId}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    const novo = {
+                        ...data,
+                        medico: { usuario: { nome: data.nomeMedico } },
+                        paciente: { usuario: { nome: data.nomePaciente } }
+                    };
+
+                    // Atualiza e em seguida garante o setId
+                    setAgendamentos(prev => {
+                        const atualizados = [...prev, novo];
+                        // setState em batch, já com ID após atualizar lista
+                        setAgendamentoId(c.agendamentoId);
+                        return atualizados;
+                    });
+                }
+            } catch (err) {
+                console.error("Erro ao buscar agendamento:", err);
+            }
+        } else {
+            setAgendamentoId(c.agendamentoId);
+        }
     };
 
     // Deleta uma consulta
@@ -104,21 +151,86 @@ const ConsultasPage = () => {
         setEditingId(null);
     };
 
+
+    // Redireciona para o prontuário correspondente
+    // com base no agendamentoId
+    const handleProntuario = async (agendamentoId) => {
+        const res = await fetch(`https://localhost:44327/api/ProntuarioClinico`, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) {
+            alert("Erro ao verificar prontuário.");
+            return;
+        }
+
+        const data = await res.json();
+        const existente = data.find(p => p.agendamentoId === agendamentoId);
+
+        if (existente) {
+            navigate(`/prontuario-clinico/${existente.id}`);
+        } else {
+            // criar automaticamente
+            // const criarRes = await fetch(`https://localhost:44327/api/ProntuarioClinico`, {
+            //     method: "POST",
+            //     headers: {
+            //         "Content-Type": "application/json",
+            //         Authorization: `Bearer ${token}`
+            //     },
+            //     body: JSON.stringify({ agendamentoId })
+            // });
+            const criarRes = await fetch(`https://localhost:44327/api/ProntuarioClinico`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                  agendamentoId,
+                  queixaPrincipal: "",
+                  historiaDoencaAtual: "",
+                  historicoMedico: "",
+                  historicoFamiliar: "",
+                  historicoSocial: "",
+                  historicoOcupacional: "",
+                  sinaisVitais: "",
+                  exameFisico: "",
+                  hipotesesDiagnosticas: "",
+                  solicitacaoExames: "",
+                  prescricao: "",
+                  planoTerapeutico: "",
+                  evolucaoClinica: "",
+                  consentimentos: "",
+                  observacoesEncerramento: ""
+                })
+              });
+              
+
+            if (criarRes.ok) {
+                const novo = await criarRes.json();
+                navigate(`/prontuario-clinico/${novo.id}`);
+            } else {
+                alert("Erro ao criar prontuário.");
+            }
+        }
+    };
+
+
+
     // Gerar Receita
     const gerarReceita = (consultaId) => {
         const url = `https://localhost:44327/api/Receita/${consultaId}/pdf`;
         fetch(url, {
             headers: { Authorization: `Bearer ${token}` }
         })
-        .then(res => res.blob())
-        .then(blob => {
-            const blobUrl = window.URL.createObjectURL(blob);
-            window.open(blobUrl, "_blank");
-        })
-        .catch(() => alert("Erro ao gerar receita"));
+            .then(res => res.blob())
+            .then(blob => {
+                const blobUrl = window.URL.createObjectURL(blob);
+                window.open(blobUrl, "_blank");
+            })
+            .catch(() => alert("Erro ao gerar receita"));
     };
-    
-// Filtra as consultas com base no filtro de texto
+
+    // Filtra as consultas com base no filtro de texto
     const consultasFiltradas = consultas.filter(c => {
         const paciente = c.agendamento?.paciente?.usuario?.nome?.toLowerCase() || "";
         const medico = c.agendamento?.medico?.usuario?.nome?.toLowerCase() || "";
@@ -132,7 +244,7 @@ const ConsultasPage = () => {
         dataConsulta: new Date(c.dataConsulta).toLocaleString(),
         diagnostico: c.diagnostico,
         raw: c, // usado para edição/deleção
-    }));  
+    }));
 
     // com botão gerar receita
     const columns = [
@@ -143,19 +255,25 @@ const ConsultasPage = () => {
         {
             field: 'acoes',
             headerName: 'Ações',
-            width: 180,
+            width: 250,
             renderCell: (params) => (
                 <Box display="flex" gap={1}>
                     <IconButton onClick={() => handleEdit(params.row.raw)}><EditIcon /></IconButton>
                     <IconButton onClick={() => handleDelete(params.row.id)}><DeleteIcon /></IconButton>
-                    <Button size="small" variant="outlined" onClick={() => gerarReceita(params.row.id)}>
-                        Receita
+
+                    <Button
+                        size="small"
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => handleProntuario(params.row.raw.agendamentoId)}
+                    >
+                        Prontuário
                     </Button>
                 </Box>
             )
         }
     ];
-    
+
     // Renderiza o componente
     // com o layout, formulário e tabela de consultas
     return (
@@ -165,8 +283,13 @@ const ConsultasPage = () => {
 
                 <Paper sx={{ p: 2, mb: 3 }}>
                     <Select
-                        value={agendamentoId}
-                        onChange={(e) => setAgendamentoId(e.target.value)}
+                        value={agendamentoId || ""}
+                        onChange={(e) => {
+                            const idSelecionado = e.target.value;
+                            setAgendamentoId(idSelecionado);
+                            const encontrado = agendamentos.find(a => a.id === idSelecionado);
+                            setAgendamentoSelecionado(encontrado);
+                        }}
                         displayEmpty
                         fullWidth
                         sx={{ mb: 2 }}
@@ -178,6 +301,8 @@ const ConsultasPage = () => {
                             </MenuItem>
                         ))}
                     </Select>
+
+
 
                     <TextField label="Data da Consulta" type="datetime-local" value={dataConsulta}
                         onChange={(e) => setDataConsulta(e.target.value)}
@@ -222,7 +347,11 @@ const ConsultasPage = () => {
                     ))}
                     <Button onClick={() => setExames([...exames, { nome: "", observacoes: "" }])}>+ Exame</Button>
 
-                    <Button variant="contained" onClick={handleAdd} sx={{ mt: 2 }}>
+                    <Button variant="contained" 
+                    onClick={handleAdd} 
+                    sx={{ mt: 2 }}
+                    disabled={isSaving}
+                    >
                         {editingId ? "Atualizar Consulta" : "Salvar Consulta"}
                     </Button>
                     {editingId && <Button onClick={resetForm}>Cancelar</Button>}
