@@ -40,7 +40,7 @@ Sistema completo para clínicas com agendamento online, prontuários eletrônico
 ![diagrama de classe - atendimento medico](https://github.com/user-attachments/assets/cf5825a2-7a42-42da-9ec1-4256ce00a3c8)
 
 ---
-## 📊 Algumas Telas do Sistema
+## 📸 Algumas Telas do Sistema
 
 ![login](https://github.com/user-attachments/assets/5f8086b1-2d26-4511-ba9d-35bf4c61b2f1)
 
