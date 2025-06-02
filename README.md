@@ -21,3 +21,10 @@ Sistema completo para gerenciamento de **Consultas Médicas**, **Agendamentos**,
 - Swagger
 
 🔗 Projeto: [Backend (ASP.NET Core)](https://lnkd.in/dPQnPAT8)
+---
+
+## 🤝 Contato
+Desenvolvido por Andrei Toledo
+📧 andreitoledo_dev@hotmail.com | 💼 [LinkedIn](https://www.linkedin.com/in/andreilucianotoledo/)
+
+### Este sistema está em constante evolução e preparado para ser personalizado conforme a realidade da sua clínica.
